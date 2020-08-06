@@ -33,8 +33,8 @@ class SuperPacket
         bool check_parseable() { return parseable; };
         void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
     private:
-        void process_v4(void *pkt);
-        void process_v6(void *pkt);
+        bool process_v4(void *pkt);
+        bool process_v6(void *pkt);
 
         bool parseable;
         uint32_t max_payload_len;

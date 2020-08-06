@@ -36,9 +36,9 @@ static struct argp_option options[] =
         {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
         {"relative_timestamps", 'r', 0, 0, "include relative timestamp field"},
         {"reverse", 'z', 0, 0, "reverse nPrint to PCAP"},
+        {"device", 'd', "STRING", 0, "device to capture from if live capture"},
         { 0 }
     };
-
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -83,6 +83,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
             break;
         case 'z':
             arguments->reverse = 1;
+            break;
+        case 'd':
+            arguments->device = arg;
             break;
         default: return ARGP_ERR_UNKNOWN;
     }

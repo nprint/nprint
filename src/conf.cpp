@@ -23,4 +23,5 @@ Config::Config()
     this->filter = NULL;
     this->ip_file = NULL;
     this->outfile = NULL;
+    this->device = NULL;
 }

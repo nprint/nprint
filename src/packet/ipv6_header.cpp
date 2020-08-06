@@ -9,7 +9,7 @@
 
 void *IPv6Header::get_raw() { return (void *) raw; }
 
-void IPv6Header::set_raw(void *raw) { raw = (struct ip6_hdr *) raw; }
+void IPv6Header::set_raw(void *raw) { this->raw = (struct ip6_hdr *) raw; }
 
 void IPv6Header::print_header()
 {
@@ -59,7 +59,6 @@ void IPv6Header::get_bitstring_header(std::vector<std::string> &to_fill)
 
     PacketHeader::make_bitstring_header(v, to_fill);
 }
-
 
 /* Header Specific */
 uint8_t  IPv6Header::get_ip_proto()  { return raw->ip6_nxt; }

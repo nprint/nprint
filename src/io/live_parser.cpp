@@ -16,15 +16,16 @@ LiveParser::LiveParser()
 void LiveParser::process_file()
 {
     pcap_t *handle;
-    char *dev, errbuf[PCAP_ERRBUF_SIZE];
+    char errbuf[PCAP_ERRBUF_SIZE];
     struct bpf_program fp;
     bpf_u_int32 mask;
     bpf_u_int32 net;
     
     /* get device */
-    dev = pcap_lookupdev(errbuf);
+    if(config.device == NULL)
     {
-        if(dev == NULL)
+        config.device = pcap_lookupdev(errbuf);
+        if(config.device == NULL)
         {
             fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
             exit(2);
@@ -33,18 +34,18 @@ void LiveParser::process_file()
     if(config.filter != NULL)
     {
         /* get mask*/
-        if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1) 
+        if (pcap_lookupnet(config.device, &net, &mask, errbuf) == -1) 
         {
-            fprintf(stderr, "Can't get netmask for device %s\n", dev);
+            fprintf(stderr, "Can't get netmask for device %s\n", config.device);
             net = 0;
             mask = 0;
         }
     }
     /* open device */
-    handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+    handle = pcap_open_live(config.device, BUFSIZ, 1, 1000, errbuf);
     if(handle == NULL)
     {
-        fprintf(stderr, "Couldn't open default device: %s\n", errbuf);
+        fprintf(stderr, "Couldn't open device: %s\n", errbuf);
         exit(2);
     }
     if(config.filter != NULL)

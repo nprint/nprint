@@ -28,10 +28,11 @@ void FileWriter::write_header(std::vector<std::string> header)
         exit(2);
     }
     
+    build_bitstring_header(header); 
     write_csv_stringvec(header);
 }
 
-std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::string> header)
+std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::string> &header)
 {
     IPv4Header v4;
     IPv6Header v6;

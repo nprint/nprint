@@ -33,6 +33,7 @@ class Config
         char *infile;
         char *outfile;
         char *ip_file;
+        char *device;
 };
 
 #endif

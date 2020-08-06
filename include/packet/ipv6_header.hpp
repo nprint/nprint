@@ -35,7 +35,7 @@ class IPv6Header : public PacketHeader
         uint8_t get_ip_proto(); 
         uint32_t get_total_len();
     private:
-        struct ip6_hdr* raw;
+        struct ip6_hdr* raw = NULL;
 };
 
 #endif

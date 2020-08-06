@@ -35,10 +35,7 @@ class FileWriter
         void write_line(std::string &line);
     private:
         Config config;
-        std::vector<std::string> build_bitstring_header(std::vector<std::string> header);
-        std::vector<std::string> build_fields_header(std::vector<std::string> header);
-        std::string output_fields;
-        std::string output_type;
+        std::vector<std::string> build_bitstring_header(std::vector<std::string> &header);
         uint32_t payload_len;
         FILE *outfile = NULL;
 };

@@ -43,7 +43,9 @@ void Payload::get_bitstring_header(std::vector<std::string> &to_fill)
 {
     std::vector<std::tuple<std::string, uint32_t> > v;
 
+
     if(max_payload_len == 0) return;
+
 
     v.push_back(std::make_tuple("payload", max_payload_len * 8));
     PacketHeader::make_bitstring_header(v, to_fill);

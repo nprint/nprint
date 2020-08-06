@@ -26,7 +26,6 @@ void FileParser::set_conf(Config c)
     
     if(config.ip_file != NULL)
     {
-        printf("config file isn't null\n");
         load_ip_map(config.ip_file);
         has_ip_map = true;
     }

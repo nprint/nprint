@@ -24,7 +24,8 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
     struct ip *ipv4h;
     struct ether_header *eth;
 
-    parseable= true;
+    parseable = true;
+
     this->max_payload_len = max_payload_len;
     eth = (struct ether_header *) pkt;
     /* Check if packet has an ethernet header, skip if so */
@@ -39,11 +40,11 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
     
     if(ipv4h->ip_v == 4)
     {
-        process_v4((void *) ipv4h);
+        parseable = process_v4((void *) ipv4h);
     }
     else if(ipv4h->ip_v == 6)
     {
-        process_v6((void *) ipv4h);
+        parseable = process_v6((void *) ipv4h);
     }
     else
     {
@@ -51,7 +52,7 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
     }
 }
 
-void SuperPacket::process_v4(void *pkt)
+bool SuperPacket::process_v4(void *pkt)
 {
     struct ip *ipv4h;
     struct tcphdr *tcph;
@@ -76,21 +77,27 @@ void SuperPacket::process_v4(void *pkt)
     {
         udph = (struct udphdr *) ((u_char *) ipv4h + ipv4_header.get_header_len());
         udp_header.set_raw(udph);
-        pload = ((u_char *) udph + 8);
+        pload = ((u_char *) udph + udp_header.get_header_len());
         pload_len = ipv4_header.get_total_len() - (ipv4_header.get_header_len() + udp_header.get_header_len());
     }
     else if(ipv4_header.get_ip_proto() == IPPROTO_ICMP)
     {
         icmph = (struct icmp *) ((u_char *) ipv4h + ipv4_header.get_header_len());
         icmp_header.set_raw(icmph);
-        pload = ((u_char *) icmph + 8);
+        pload = ((u_char *) icmph + icmp_header.get_header_len());
         pload_len = ipv4_header.get_total_len() - (ipv4_header.get_header_len() + icmp_header.get_header_len());
+    }
+    else
+    {
+        return false;
     }
     payload.set_raw(pload);
     payload.set_info(pload_len, max_payload_len);
+
+    return true;
 }
 
-void SuperPacket::process_v6(void *pkt)
+bool SuperPacket::process_v6(void *pkt)
 {
     struct ip6_hdr *ipv6h;
     struct tcphdr *tcph;
@@ -103,31 +110,37 @@ void SuperPacket::process_v6(void *pkt)
     pload_len = 0;
     
     ipv6h = (struct ip6_hdr*) pkt;
-    ipv6_header.set_raw(ipv6h);
+    ipv6_header.set_raw(pkt);
 
     if(ipv6_header.get_ip_proto() == IPPROTO_TCP)
     {
-        tcph = (struct tcphdr *) ((char *) ipv6h + sizeof(struct ip6_hdr));
+        tcph = (struct tcphdr *) ((u_char *) ipv6h + ipv6_header.get_header_len());
         tcp_header.set_raw(tcph);
         pload = tcph + tcp_header.get_header_len();
         pload_len = ipv6_header.get_total_len() - (tcp_header.get_header_len() + ipv6_header.get_header_len());
     }
     else if(ipv6_header.get_ip_proto() == IPPROTO_UDP)
     {
-        udph = (struct udphdr *) ((char *) ipv6h + sizeof(struct ip6_hdr)); 
+        udph = (struct udphdr*) ((u_char *) ipv6h + ipv6_header.get_header_len());
         udp_header.set_raw(udph);
         pload = ((u_char *) udph + 8);
         pload_len = ipv6_header.get_total_len() - (udp_header.get_header_len() + ipv6_header.get_header_len());
     }
     else if(ipv6_header.get_ip_proto() == IPPROTO_ICMP)
     {
-        icmph = (struct icmp *) ((char *) ipv6h + sizeof(struct ip6_hdr)); 
+        icmph = (struct icmp *) ((u_char *) ipv6h + ipv6_header.get_header_len());
         icmp_header.set_raw(icmph);
         pload = ((u_char *) icmph + 8);
         pload_len = ipv6_header.get_total_len() - (ipv6_header.get_header_len() + icmp_header.get_header_len());
     }
+    else
+    {
+        return false;
+    }
     payload.set_raw(pload);
     payload.set_info(pload_len, max_payload_len);
+
+    return true;
 }
 
 void SuperPacket::get_bitstring(Config *c, std::vector<int8_t> &to_fill)

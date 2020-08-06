@@ -27,7 +27,7 @@ class TCPHeader : public PacketHeader
 
         /* Header Specific */ 
     private:
-        struct tcphdr* raw;
+        struct tcphdr* raw = NULL;
 };
     
 #endif
