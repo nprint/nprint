@@ -20,7 +20,7 @@
 const char *argp_program_version = "nprint 1.0.0";
 const char *argp_program_bug_address = "https://github.com/nprint/nprint";
 static char doc[] = "Full information can be found at https://nprint.github.io/nprint/";
-static char args_doc[] = "nprint [OPTIONS]";
+static char args_doc[] = "";
 static struct argp_option options[] = 
     {
         {"read_file", 'r', "FILE", 0, "file to read from, either PCAP or hex packets"},
@@ -34,7 +34,7 @@ static struct argp_option options[] =
         {"udp",  'u', 0, 0, "include udp headers"},
         {"icmp", 'i', 0, 0, "include icmp headers"},
         {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
-        {"relative_timestamps", 'r', 0, 0, "include relative timestamp field"},
+        {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
         {"reverse", 'z', 0, 0, "reverse nPrint to PCAP"},
         {"device", 'd', "STRING", 0, "device to capture from if live capture"},
         { 0 }
@@ -51,7 +51,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
         case 'f':
             arguments->filter = arg;
             break;
-        case 's':
+        case 'R':
             arguments->relative_timestamps = 1;
             break;
         case 'w':
