@@ -26,6 +26,7 @@ void FileParser::set_conf(Config c)
     
     if(config.ip_file != NULL)
     {
+        printf("ip map loaded\n");
         load_ip_map(config.ip_file);
         has_ip_map = true;
     }
@@ -79,7 +80,6 @@ SuperPacket *FileParser::process_packet(void *pkt)
 
     /* determine if we should output the packet */
     wtf = true;
-   
     /* Not writing per host, keep track of num processed */ 
     if(!has_ip_map)
     {
@@ -99,7 +99,7 @@ SuperPacket *FileParser::process_packet(void *pkt)
         /* IP in map, check if we've surpassed total packets to process for IP */
         else
         {
-            if(mit->second >= config.num_packets) wtf = false;
+            if((mit->second >= config.num_packets) && config.num_packets != 0) wtf = false;
             mit->second++;
         }
     }
