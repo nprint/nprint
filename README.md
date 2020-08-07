@@ -1,8 +1,6 @@
 # Details
 Overview / Original nPrint paper can be found here: https://nprint.github.io/nprint/
 
-Detailed usage can be found in the nPrint wiki: https://github.com/nprint/nprint/wiki
+Detailed usage and installation information can be found in the nPrint wiki: https://github.com/nprint/nprint/wiki
 
-# Install
-
-Download latest release and ` ./configure && make && make install `
+There will be bugs! Please report any you see.
