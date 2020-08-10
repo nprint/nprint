@@ -23,11 +23,14 @@ static char doc[] = "Full information can be found at https://nprint.github.io/n
 static char args_doc[] = "";
 static struct argp_option options[] = 
     {
-        {"read_file", 'r', "FILE", 0, "file to read from, either PCAP or hex packets"},
-        {"write_file", 'w', "FILE", 0, "file for output, else stdout"},
+        {"device", 'd', "STRING", 0, "device to capture from if live capture"},
         {"filter", 'f', "STRING", 0, "filter for libpcap"},
         {"count", 'c', "INTEGER", 0, "number of packets to parse (if not all)"},
-        {"ip_file", 'q', "FILE", 0, "file of IP addresses to filter with, can be combined with num_packets for num_packets per ip"},
+        {"pcap_file", 'P', "FILE", 0, "pcap infile"},
+        {"nPrint_file", 'N', "FILE", 0, "nPrint infile"},
+        {"csv_file", 'C', "FILE", 0, "csv (hex packets) infile"},
+        {"write_file", 'w', "FILE", 0, "file for output, else stdout"},
+        {"ip_file", 'I', "FILE", 0, "file of IP addresses to filter with (1 per line), can be combined with num_packets for num_packets per ip"},
         {"ipv4", '4', 0, 0, "include ipv4 headers"},
         {"ipv6", '6', 0, 0, "include ipv6 headers"},
         {"tcp",  't', 0, 0, "include tcp headers"},
@@ -35,8 +38,6 @@ static struct argp_option options[] =
         {"icmp", 'i', 0, 0, "include icmp headers"},
         {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
         {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
-        {"reverse", 'z', 0, 0, "reverse nPrint to PCAP"},
-        {"device", 'd', "STRING", 0, "device to capture from if live capture"},
         { 0 }
     };
 
@@ -45,20 +46,32 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
     Config *arguments = (Config *) state->input;
     switch (key) 
     {
-        case 'r':
-            arguments->infile = arg;
+        case 'd':
+            arguments->device = arg;
             break;
         case 'f':
             arguments->filter = arg;
             break;
-        case 'R':
-            arguments->relative_timestamps = 1;
+        case 'c':
+            arguments->num_packets = atoi(arg);
+            break;
+        case 'P':
+            arguments->infile = arg;
+            arguments->pcap = 1;
+            break;
+        case 'N':
+            arguments->infile = arg;
+            arguments->nprint = 1;
+            break;
+        case 'C':
+            arguments->infile = arg;
+            arguments->csv = 1;
             break;
         case 'w':
             arguments->outfile = arg;
             break;
-        case 'c':
-            arguments->num_packets = atoi(arg);
+        case 'I':
+            arguments->ip_file = arg;
             break;
         case '4':
             arguments->ipv4 = 1;
@@ -78,15 +91,10 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
         case 'p':
             arguments->payload = atoi(arg);
             break;
-        case 'q':
-            arguments->ip_file = arg;
+        case 'R':
+            arguments->relative_timestamps = 1;
             break;
-        case 'z':
-            arguments->reverse = 1;
-            break;
-        case 'd':
-            arguments->device = arg;
-            break;
+
         default: return ARGP_ERR_UNKNOWN;
     }
     return 0;
@@ -121,36 +129,45 @@ int main(int argc, char **argv)
     }
     else
     {
-        /* PCAP file */
-        if(std::string(config.infile).find(".pcap") != std::string::npos)
+        if((config.pcap + config.csv + config.nprint) > 1)
+        {
+            fprintf(stderr, "Only one of {pcap, csv, nprint} input files can be selected\n");
+            exit(1);
+        }
+        else if(config.pcap == 1)
         {
             pcap_parser = new PCAPParser();
             pcap_parser->set_filewriter(fw);
             pcap_parser->set_conf(config);
             pcap_parser->process_file();
         }
-        /* CSV file, either nPrint or hex */
-        else if(std::string(config.infile).find(".csv") != std::string::npos)
+        else if(config.csv == 1)
         {
-            if(config.reverse == 1)
+            stringfile_parser = new StringfileParser();
+            stringfile_parser->set_filewriter(fw);
+            stringfile_parser->set_conf(config);
+            stringfile_parser->process_file();
+        }
+        else if(config.nprint == 1)
+        {
+            /* need an outfile for nprint, can't print pcap to stdout */
+            if(config.outfile == NULL)
+            {
+                fprintf(stderr, "nprint infile option requires outfile for writing reversed pcap\n");
+                exit(1);
+            }
+            else
             {
                 nprint_parser = new NprintParser();
                 nprint_parser->set_conf(config);
                 nprint_parser->process_file();
             }
-            else
-            {
-                stringfile_parser = new StringfileParser();
-                stringfile_parser->set_filewriter(fw);
-                stringfile_parser->set_conf(config);
-                stringfile_parser->process_file();
-            }
         }
         else
         {
-            printf("file type unsupported: supported file types: { pcap csv }\n");
-            return 1;
-       }
+            fprintf(stderr, "Unsupported option configuration\n");
+            exit(1);
+        }
     }
     return 0;
 }

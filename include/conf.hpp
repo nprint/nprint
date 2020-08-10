@@ -19,16 +19,21 @@ class Config
 {
     public: 
         Config();
+        /* Protocol flags */
         uint8_t ipv4;
         uint8_t ipv6;
         uint8_t tcp;
         uint8_t udp;
         uint8_t icmp;
-        uint8_t reverse;
         uint32_t payload;
+        uint8_t relative_timestamps;
+
+        /*  Output modification */
+        uint8_t csv;
+        uint8_t pcap;
+        uint8_t nprint;
         int8_t fill_with;
         uint64_t num_packets;
-        uint8_t relative_timestamps;
         char *filter;
         char *infile;
         char *outfile;
