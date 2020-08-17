@@ -8,6 +8,7 @@
 #ifndef ICMP_HEADER
 #define ICMP_HEADER
 
+#include <netinet/ip.h>
 #include <netinet/ip_icmp.h>
 
 #include "packet_header.hpp"
