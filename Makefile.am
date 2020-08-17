@@ -13,4 +13,5 @@ nprint_SOURCES = src/conf.cpp src/nprint.cpp src/io/file_parser.cpp src/io/file_
 				include/io/stringfile_parser.hpp include/packet/superpacket.hpp include/packet/tcp_header.hpp \
 				include/packet/udp_header.hpp include/io/live_parser.hpp include/io/nprint_parser.hpp
 
-AM_CPPFLAGS = -Iinclude/ -Iinclude/io/ -Iinclude/packet/ -pedantic -Wall -Ofast #-Werror
+AM_CPPFLAGS = -Iinclude/ -Iinclude/io/ -Iinclude/packet/ -pedantic -Wall -Ofast -std=gnu++11 $(WRAPPER_CPPFLAGS)
+AM_LDFLAGS = $(WRAPPER_LDFLAGS)

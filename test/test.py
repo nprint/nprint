@@ -25,10 +25,10 @@ def run_test(pcap, test_type, keep_files):
     subprocess.run('sudo tcpdump -r {0} -nnvvtK > {1}'.format(pcap, pcap_text), shell=True)
     # convert pcap to nPrint
     print('  2. Creating nPrint for pcap')
-    subprocess.run('nprint -P {0} -4 -t -i -u -6 -p 2000 -w {1}'.format(pcap, nprint), shell=True)
+    subprocess.run('nprint -P {0} -4 -t -i -u -6 -p 2000 -W {1}'.format(pcap, nprint), shell=True)
     # convert nPrint to back to pcap
     print('  3. reversing nPrint back to pcap')
-    subprocess.run('nprint -N {0} -w {1}'.format(nprint, reverse_pcap), shell=True)
+    subprocess.run('nprint -N {0} -W {1}'.format(nprint, reverse_pcap), shell=True)
     # TCPDUMP
     print('  4. Running tcpdump on reversed pcap')
     subprocess.run('sudo tcpdump -r {0} -nnvvtK > {1}'.format(reverse_pcap, nprint_text), shell=True)

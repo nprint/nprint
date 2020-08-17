@@ -29,7 +29,7 @@ static struct argp_option options[] =
         {"pcap_file", 'P', "FILE", 0, "pcap infile"},
         {"nPrint_file", 'N', "FILE", 0, "nPrint infile"},
         {"csv_file", 'C', "FILE", 0, "csv (hex packets) infile"},
-        {"write_file", 'w', "FILE", 0, "file for output, else stdout"},
+        {"write_file", 'W', "FILE", 0, "file for output, else stdout"},
         {"ip_file", 'I', "FILE", 0, "file of IP addresses to filter with (1 per line), can be combined with num_packets for num_packets per ip"},
         {"ipv4", '4', 0, 0, "include ipv4 headers"},
         {"ipv6", '6', 0, 0, "include ipv6 headers"},
@@ -67,7 +67,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
             arguments->infile = arg;
             arguments->csv = 1;
             break;
-        case 'w':
+        case 'W':
             arguments->outfile = arg;
             break;
         case 'I':

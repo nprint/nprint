@@ -30,6 +30,20 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_CHECK_FUNCS([inet_ntoa])
 
+# OS Check here
+WRAPPER_LDFLAGS = ""
+WRAPPER_CPPFLAGS = ""
+AC_CANONICAL_HOST
+AS_CASE([$host_os],
+        [darwin*],
+        [
+         WRAPPER_CPPFLAGS="$WRAPPER_CPPFLAGS -I/usr/local/include"
+         WRAPPER_LDFLAGS="$WRAPPER_LDFLAGS -largp -L/usr/local/lib"
+        ])
+
+AC_SUBST([WRAPPER_CPPFLAGS])
+AC_SUBST([WRAPPER_LDFLAGS])
+
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_FILES([Makefile])
 
