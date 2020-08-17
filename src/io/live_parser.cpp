@@ -15,7 +15,7 @@ LiveParser::LiveParser()
 
 void LiveParser::process_file()
 {
-    uint32_t rv;
+    int32_t rv;
     pcap_t *handle;
     pcap_if_t *l;
     char errbuf[PCAP_ERRBUF_SIZE];
