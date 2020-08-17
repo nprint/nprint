@@ -10,8 +10,8 @@
 
 #include <tuple> 
 
-#include <netinet/ip.h>
 #include <pcap.h>
+#include <netinet/ip.h>
 
 #include "file_parser.hpp"
 #include "superpacket.hpp"

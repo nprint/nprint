@@ -15,7 +15,9 @@ LiveParser::LiveParser()
 
 void LiveParser::process_file()
 {
+    uint32_t rv;
     pcap_t *handle;
+    pcap_if_t *l;
     char errbuf[PCAP_ERRBUF_SIZE];
     struct bpf_program fp;
     bpf_u_int32 mask;
@@ -24,12 +26,13 @@ void LiveParser::process_file()
     /* get device */
     if(config.device == NULL)
     {
-        config.device = pcap_lookupdev(errbuf);
-        if(config.device == NULL)
+        rv = pcap_findalldevs(&l, errbuf);
+        if(rv == -1)
         {
-            fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
+            fprintf(stderr, "Failure looking up default device: %s\n", errbuf);
             exit(2);
         }
+        config.device = l->name;
     }
     if(config.filter != NULL)
     {

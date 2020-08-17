@@ -8,6 +8,7 @@
 #ifndef IPv6_HEADER
 #define IPv6_HEADER
 
+#include <netinet/ip.h>
 #include <netinet/ip6.h>
 
 #include "packet_header.hpp"

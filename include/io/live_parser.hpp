@@ -8,7 +8,13 @@
 #ifndef LIVE_PARSER 
 #define LIVE_PARSER
 
-#include <netinet/ether.h>
+
+#if defined(__NetBSD__)
+#include <net/if_ether.h>
+#else
+#include <net/ethernet.h>
+#endif
+
 #include <pcap.h>
 
 #include "file_parser.hpp"
