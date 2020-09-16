@@ -26,7 +26,15 @@ void NprintParser::process_file()
     time->tv_usec = 0;
     pcap_header = new pcap_pkthdr;
 
-    pd = pcap_open_dead(DLT_RAW, 65535 /* snaplen */);
+    if(config.eth)
+    {
+        pd = pcap_open_dead(DLT_EN10MB, 65535 /* snaplen */);
+    }
+    else
+    {
+        pd = pcap_open_dead(DLT_RAW, 65535 /* snaplen */);
+    }
+
     t = pcap_dump_open(pd, config.outfile);
     /*  header */
     getline(instream, line);
@@ -73,6 +81,7 @@ std::string NprintParser::clean_line(std::string &line)
 std::tuple<void *, uint64_t> NprintParser::parse_packet(std::string &bits)
 {
     struct ip *v4;
+    struct ether_header *eth;
     struct ip6_hdr *v6;
     u_int8_t *packet;
     uint32_t len;
@@ -80,16 +89,26 @@ std::tuple<void *, uint64_t> NprintParser::parse_packet(std::string &bits)
     packet = transform_bitstring(bits);
     
     len = 0;
-    v4 = (struct ip *) packet;
+    if(config.eth)
+    {
+        eth = (struct ether_header *) packet;
+        v4 = (struct ip *) &eth[1];
+    }
+    else
+    {
+        v4 = (struct ip *) packet;
+    }
     if(v4->ip_v == 4)
     {
-        len = ntohs(v4->ip_len); 
+        len = ntohs(v4->ip_len);
+        if(config.eth) len += 14;
     }
     else if(v4->ip_v == 6)
     {
         v6 = (struct ip6_hdr *) packet;
         /* fixed header, change when full ipv6 implemented */
         len = ntohs(v6->ip6_plen) + 40;
+        if(config.eth) len += 14;
     }
     else
     {

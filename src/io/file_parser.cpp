@@ -76,6 +76,7 @@ SuperPacket *FileParser::process_packet(void *pkt)
     to_fill.clear();
     sp = new SuperPacket(pkt, config.payload);
     if(!sp->check_parseable()) return NULL;
+    if(config.verbose) sp->print_packet();
     src_ip = sp->get_ip_address();
 
     /* determine if we should output the packet */
@@ -113,6 +114,7 @@ SuperPacket *FileParser::process_packet(void *pkt)
         delete sp;
         return NULL;
     }
+
 }
 
 void FileParser::write_output(SuperPacket *sp)

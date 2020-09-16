@@ -13,10 +13,9 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-/* Included to skip ethernet headers if they exist on packets */
-#include <netinet/if_ether.h>
 
 #include "conf.hpp"
+#include "ethernet_header.hpp"
 #include "ipv4_header.hpp"
 #include "ipv6_header.hpp"
 #include "udp_header.hpp"
@@ -38,6 +37,7 @@ class SuperPacket
 
         bool parseable;
         uint32_t max_payload_len;
+        EthHeader ethernet_header;
         IPv4Header ipv4_header;
         IPv6Header ipv6_header;
         TCPHeader tcp_header;

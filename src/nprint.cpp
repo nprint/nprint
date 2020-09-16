@@ -31,6 +31,7 @@ static struct argp_option options[] =
         {"csv_file", 'C', "FILE", 0, "csv (hex packets) infile"},
         {"write_file", 'W', "FILE", 0, "file for output, else stdout"},
         {"ip_file", 'I', "FILE", 0, "file of IP addresses to filter with (1 per line), can be combined with num_packets for num_packets per ip"},
+        {"eth",  'e', 0, 0, "include eth headers"},
         {"ipv4", '4', 0, 0, "include ipv4 headers"},
         {"ipv6", '6', 0, 0, "include ipv6 headers"},
         {"tcp",  't', 0, 0, "include tcp headers"},
@@ -38,6 +39,7 @@ static struct argp_option options[] =
         {"icmp", 'i', 0, 0, "include icmp headers"},
         {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
         {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
+        {"verbose", 'V', 0, 0, "print human readable packets with nPrints"},
         { 0 }
     };
 
@@ -46,6 +48,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
     Config *arguments = (Config *) state->input;
     switch (key) 
     {
+        case 'V':
+            arguments->verbose = 1;
+            break;
         case 'd':
             arguments->device = arg;
             break;
@@ -72,6 +77,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
             break;
         case 'I':
             arguments->ip_file = arg;
+            break;
+        case 'e':
+            arguments->eth = 1;
             break;
         case '4':
             arguments->ipv4 = 1;

@@ -8,6 +8,7 @@
 
 Config::Config()
 {
+    this->eth = 0;
     this->ipv4 = 0;
     this->ipv6 = 0;
     this->tcp = 0;
@@ -20,6 +21,7 @@ Config::Config()
     this->pcap = 0;
     this->csv = 0;
     this->nprint = 0;
+    this->verbose = 0;
     this->infile = NULL;
     this->filter = NULL;
     this->ip_file = NULL;

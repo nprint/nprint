@@ -9,7 +9,8 @@
 
 PCAPParser::PCAPParser()
 {
-    mrt = 0;
+    mrt.tv_sec = 0;
+    mrt.tv_usec = 0;
     to_fill.reserve(((SIZE_IPV4_HEADER_BITSTRING + SIZE_TCP_HEADER_BITSTRING + SIZE_UDP_HEADER_BITSTRING + SIZE_ICMP_HEADER_BITSTRING) * 8) * 4);
 }
 
@@ -34,7 +35,7 @@ void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkt
     
     sp = pcp->process_packet((void *) packet);
     if(sp == NULL) return;
-    rts = pcp->process_timestamp(pkthdr->ts.tv_sec);
+    rts = pcp->process_timestamp(pkthdr->ts);
 
     pcp->custom_output.push_back(sp->get_ip_address());
     if(rts != -1) pcp->custom_output.push_back(std::to_string(rts));
@@ -50,22 +51,21 @@ void PCAPParser::format_and_write_header()
     fw->write_header(header);
 }
 
-int64_t PCAPParser::process_timestamp(uint32_t ts)
+int64_t PCAPParser::process_timestamp(struct timeval ts)
 {
     int64_t rts;
     
     if(config.relative_timestamps == 0) return -1;
-
-    if(mrt == 0)
+    
+    if(mrt.tv_sec == 0) 
     {
-        mrt = ts;
         rts = 0;
     }
     else
     {
-        rts = ts - mrt;
-        mrt = ts;
+        rts = (1000000 * (ts.tv_sec - mrt.tv_sec)) + ts.tv_usec - mrt.tv_usec;
     }
-
+    
+    mrt = ts;
     return rts;
 }

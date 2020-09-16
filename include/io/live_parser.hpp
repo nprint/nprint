@@ -31,10 +31,10 @@ class LiveParser : public FileParser
         void format_and_write_header();
         static void packet_handler(u_char *user_data, const struct pcap_pkthdr* pkthdr,
                                    const u_char* packet);
-        int64_t process_timestamp(uint32_t ts);
+        int64_t process_timestamp(struct timeval ts);
     private:
         std::vector<std::string> to_fill;
-        uint32_t mrt;
+        struct timeval mrt;
 };
 
 #endif

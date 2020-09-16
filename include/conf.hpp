@@ -20,6 +20,7 @@ class Config
     public: 
         Config();
         /* Protocol flags */
+        uint8_t eth;
         uint8_t ipv4;
         uint8_t ipv6;
         uint8_t tcp;
@@ -29,6 +30,7 @@ class Config
         uint8_t relative_timestamps;
 
         /*  Output modification */
+        uint8_t verbose;
         uint8_t csv;
         uint8_t pcap;
         uint8_t nprint;

@@ -10,6 +10,7 @@
 void SuperPacket::print_packet()
 {
     printf("Superpacket {\n");
+    ethernet_header.print_header();
     ipv4_header.print_header();
     ipv6_header.print_header();
     tcp_header.print_header();
@@ -28,9 +29,11 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
 
     this->max_payload_len = max_payload_len;
     eth = (struct ether_header *) pkt;
-    /* Check if packet has an ethernet header, skip if so */
+
+    /* Check if packet has an ethernet header */
     if((ntohs(eth->ether_type) == ETHERTYPE_IP) || ((ntohs(eth->ether_type) == 0x86DD)))
     {
+        ethernet_header.set_raw(eth);
         ipv4h = (struct ip *) &eth[1];
     }
     else
@@ -145,6 +148,7 @@ bool SuperPacket::process_v6(void *pkt)
 
 void SuperPacket::get_bitstring(Config *c, std::vector<int8_t> &to_fill)
 {
+    if(c->eth == 1) ethernet_header.get_bitstring(to_fill, c->fill_with);
     if(c->ipv4 == 1) ipv4_header.get_bitstring(to_fill, c->fill_with);
     if(c->ipv6 == 1) ipv6_header.get_bitstring(to_fill, c->fill_with);
     if(c->tcp == 1)  tcp_header.get_bitstring(to_fill,  c->fill_with);

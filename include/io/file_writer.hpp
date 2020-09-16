@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include "conf.hpp"
+#include "ethernet_header.hpp"
 #include "ipv4_header.hpp"
 #include "ipv6_header.hpp"
 #include "tcp_header.hpp"
