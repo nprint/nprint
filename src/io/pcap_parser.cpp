@@ -20,8 +20,9 @@ void PCAPParser::process_file()
     pcap_t *f = pcap_open_offline_with_tstamp_precision(config.infile, 
                                                         PCAP_TSTAMP_PRECISION_MICRO,
                                                         errbuf);
-
-    if(pcap_loop(f, 0, packet_handler, (u_char *) this) < 0) return;
+    
+    pcap_loop(f, 0, packet_handler, (u_char *) this);
+    pcap_close(f);
 }
 
 void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkthdr,

@@ -31,6 +31,7 @@
 class FileParser
 {
     public:
+        virtual ~FileParser() {};
         virtual void process_file() = 0;
         virtual void format_and_write_header() = 0;
         void set_conf(Config c);

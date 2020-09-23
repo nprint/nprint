@@ -148,6 +148,7 @@ int main(int argc, char **argv)
             pcap_parser->set_filewriter(fw);
             pcap_parser->set_conf(config);
             pcap_parser->process_file();
+            delete pcap_parser;
         }
         else if(config.csv == 1)
         {
@@ -155,6 +156,7 @@ int main(int argc, char **argv)
             stringfile_parser->set_filewriter(fw);
             stringfile_parser->set_conf(config);
             stringfile_parser->process_file();
+            delete stringfile_parser;
         }
         else if(config.nprint == 1)
         {
@@ -169,6 +171,7 @@ int main(int argc, char **argv)
                 nprint_parser = new NprintParser();
                 nprint_parser->set_conf(config);
                 nprint_parser->process_file();
+                delete nprint_parser;
             }
         }
         else
@@ -177,5 +180,6 @@ int main(int argc, char **argv)
             exit(1);
         }
     }
+    delete fw;
     return 0;
 }

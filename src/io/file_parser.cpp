@@ -75,7 +75,12 @@ SuperPacket *FileParser::process_packet(void *pkt)
 
     to_fill.clear();
     sp = new SuperPacket(pkt, config.payload);
-    if(!sp->check_parseable()) return NULL;
+    if(!sp->check_parseable())
+    {
+        delete sp;
+        return NULL;
+    }
+        
     if(config.verbose) sp->print_packet();
     src_ip = sp->get_ip_address();
 
@@ -123,4 +128,5 @@ void FileParser::write_output(SuperPacket *sp)
     fw->write_bitstring_line(custom_output, bitstring_vec);
     bitstring_vec.clear();
     custom_output.clear();
+    delete sp;
 }
