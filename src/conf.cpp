@@ -15,13 +15,14 @@ Config::Config()
     this->udp = 0;
     this->icmp = 0;
     this->payload = 0;
-    this->fill_with = -1;
+    this->fill_with = 0;
     this->num_packets = 0;
     this->relative_timestamps = 0;
     this->pcap = 0;
     this->csv = 0;
     this->nprint = 0;
     this->verbose = 0;
+    this->live_capture = 0;
     this->infile = NULL;
     this->filter = NULL;
     this->ip_file = NULL;

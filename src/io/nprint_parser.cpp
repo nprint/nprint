@@ -105,6 +105,7 @@ std::tuple<void *, uint64_t> NprintParser::parse_packet(std::string &bits)
     }
     else if(v4->ip_v == 6)
     {
+        printf("v6\n");
         v6 = (struct ip6_hdr *) packet;
         /* fixed header, change when full ipv6 implemented */
         len = ntohs(v6->ip6_plen) + 40;

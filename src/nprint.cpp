@@ -14,7 +14,6 @@
 #include "pcap_parser.hpp"
 #include "file_writer.hpp"
 #include "nprint_parser.hpp"
-#include "live_parser.hpp"
 #include "stringfile_parser.hpp"
 
 const char *argp_program_version = "nprint 1.0.4";
@@ -116,7 +115,6 @@ int main(int argc, char **argv)
     StringfileParser *stringfile_parser;
     PCAPParser *pcap_parser;
     NprintParser *nprint_parser;
-    LiveParser *live_parser;
 
     Config config;
     
@@ -126,14 +124,17 @@ int main(int argc, char **argv)
     /* File Writer handles writing nPrints */
     fw = new FileWriter;
     fw->set_conf(config);
-
-    /* No infile means processing live traffic */
+    
+    /* No infile means processing live traffic. There is a way to delete this code, but this is verbose */
     if(config.infile == NULL)
     {
-        live_parser = new LiveParser();
-        live_parser->set_filewriter(fw);
-        live_parser->set_conf(config);
-        live_parser->process_file();
+        /* Only time we set this, it's probably better to leave the user to default to live than specify */
+        config.live_capture = 1;
+        pcap_parser = new PCAPParser();
+        pcap_parser->set_filewriter(fw);
+        pcap_parser->set_conf(config);
+        pcap_parser->process_file();
+        delete pcap_parser;
     }
     else
     {

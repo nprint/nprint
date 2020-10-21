@@ -30,6 +30,7 @@ class Config
         uint8_t relative_timestamps;
 
         /*  Output modification */
+        uint8_t live_capture;
         uint8_t verbose;
         uint8_t csv;
         uint8_t pcap;
