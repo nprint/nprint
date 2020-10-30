@@ -42,6 +42,7 @@ static struct argp_option options[] =
         {"udp",  'u', 0, 0, "include udp headers"},
         {"icmp", 'i', 0, 0, "include icmp headers"},
         {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
+        {"absolute_timestamps", 'A', 0, 0, "include absolute timestmap field"},
         {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
         {"verbose", 'V', 0, 0, "print human readable packets with nPrints"},
         { 0 }
@@ -52,6 +53,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
     Config *arguments = (Config *) state->input;
     switch (key) 
     {
+        case 'A':
+            arguments->absolute_timestamps = 1;
+            break;
         case 'V':
             arguments->verbose = 1;
             break;

@@ -38,6 +38,9 @@ void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkt
 
     pcp->custom_output.push_back(sp->get_index(&(pcp->config)));
     if(rts != -1) pcp->custom_output.push_back(std::to_string(rts));
+    if(pcp->config.absolute_timestamps)
+    {
+    }
     pcp->write_output(sp);
 }
 
@@ -46,6 +49,11 @@ void PCAPParser::format_and_write_header()
     std::vector<std::string> header;
     header.push_back(config.index_map.find(config.index)->second);
     if(config.relative_timestamps == 1) header.push_back("rts");
+    if(config.absolute_timestamps == 1)
+    {
+        header.push_back("tv_sec");
+        header.push_back("tv_usec");
+    }
 
     fw->write_header(header);
 }

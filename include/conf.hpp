@@ -38,6 +38,7 @@ class Config
         uint8_t verbose;
         uint8_t live_capture;
         uint8_t output_index;
+        uint8_t absolute_timestamps;
         uint8_t relative_timestamps;
         int8_t fill_with;
         uint64_t num_packets;

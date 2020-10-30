@@ -17,6 +17,7 @@ Config::Config()
     this->payload = 0;
     this->fill_with = 0;
     this->num_packets = 0;
+    this->absolute_timestamps = 0;
     this->relative_timestamps = 0;
     this->pcap = 0;
     this->csv = 0;
