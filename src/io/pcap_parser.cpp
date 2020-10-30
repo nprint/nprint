@@ -40,6 +40,8 @@ void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkt
     if(rts != -1) pcp->custom_output.push_back(std::to_string(rts));
     if(pcp->config.absolute_timestamps)
     {
+        pcp->custom_output.push_back(std::to_string(pkthdr->ts.tv_sec));
+        pcp->custom_output.push_back(std::to_string(pkthdr->ts.tv_usec));
     }
     pcp->write_output(sp);
 }
