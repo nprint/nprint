@@ -157,19 +157,98 @@ void SuperPacket::get_bitstring(Config *c, std::vector<int8_t> &to_fill)
     if(c->payload != 0) payload.get_bitstring(to_fill,  c->fill_with);
 }
 
-std::string SuperPacket::get_ip_address()
+
+std::string SuperPacket::get_index(Config *c)
+{
+    std::string rv;
+    /* Source IP */
+    /* Could switch here... */
+    if(c->index == 0)
+    {
+        rv = get_ip_address(true);
+    }
+    /* DST IP */
+    else if(c->index == 1)
+    {
+        rv = get_ip_address(false);
+    }
+    /* Source Port */
+    else if(c->index == 2)
+    {
+        rv = get_port(true);
+    }
+    /* Dest Port */
+    else if(c->index == 3)
+    {
+        rv = get_port(false);
+    }
+    /* Flow */
+    else if(c->index == 4)
+    {
+        /* There is 99% probability a better way to do this. */
+        rv = get_ip_address(true);
+        rv += std::string("_") + get_ip_address(false);
+        rv += std::string("_") + get_port(true);
+        rv += std::string("_") + get_port(false);
+        if(tcp_header.get_raw() != NULL)
+        {
+            rv += std::string("_") + "TCP";
+        }
+        else if(udp_header.get_raw() != NULL)
+        {
+            rv += std::string("_") + "UDP";
+        }
+        else
+        {
+            rv += std::string("_") + "NULL";
+        }
+    }
+
+    return rv;
+}
+
+std::string SuperPacket::get_ip_address(bool src)
 {
     if(ipv4_header.get_raw() != NULL)
     {
-        return ipv4_header.get_src_ip();
+        if(src)
+        {
+            return ipv4_header.get_src_ip();
+        }
+        else
+        {
+            return ipv4_header.get_dst_ip();
+        }
     }
     else if(ipv6_header.get_raw() != NULL)
     {
-        return ipv6_header.get_src_ip();
+        if(src)
+        {
+            return ipv6_header.get_src_ip();
+        }
+        else
+        {
+            return ipv6_header.get_dst_ip();
+        }
     }
     else
     {
         return "NULL";
     }
+}
 
+std::string SuperPacket::get_port(bool src)
+{
+    if(tcp_header.get_raw() != NULL)
+    {
+        return tcp_header.get_port(src);
+    }
+    else if(udp_header.get_raw() != NULL)
+    {
+        return udp_header.get_port(src);
+    }
+    else
+    {
+        return "NULL";
+    }
 }

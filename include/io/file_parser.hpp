@@ -49,10 +49,7 @@ class FileParser
         std::vector<int8_t> bitstring_vec;
         std::vector<std::string> fields_vec;
     private:
-        void load_ip_map(std::string ip_file);
-        std::map<std::string, std::uint32_t> m;
         std::string output_type;
-        bool has_ip_map;
 };
 
 #endif

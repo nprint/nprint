@@ -24,35 +24,11 @@ void FileParser::set_conf(Config c)
     bitstring_vec.reserve(BITSTRING_RESERVE_SIZE);
     fields_vec.reserve(FIELDS_RESERVE_SIZE);
     
-    if(config.ip_file != NULL)
-    {
-        printf("ip map loaded\n");
-        load_ip_map(config.ip_file);
-        has_ip_map = true;
-    }
-    else
-    {
-        has_ip_map = false;
-    }
 }
 
 void FileParser::set_filewriter(FileWriter *fw)
 {
     this->fw = fw;
-}
-
-#define IP_FILE_IP_LOC 0
-void FileParser::load_ip_map(std::string ip_file)
-{
-    std::string line;
-    std::vector<std::string> tokens;
-
-    std::ifstream infile(ip_file);
-    while(getline(infile, line))
-    {
-        tokenize_line(line, tokens);
-        m.insert(make_pair(tokens[IP_FILE_IP_LOC], 0));
-    }
 }
 
 void FileParser::tokenize_line(std::string line, std::vector<std::string> &to_fill, char delimiter)
@@ -67,7 +43,6 @@ void FileParser::tokenize_line(std::string line, std::vector<std::string> &to_fi
 
 SuperPacket *FileParser::process_packet(void *pkt)
 {
-    bool wtf;
     SuperPacket *sp;
     std::string src_ip;
     std::vector<std::string> to_fill;
@@ -82,44 +57,11 @@ SuperPacket *FileParser::process_packet(void *pkt)
     }
         
     if(config.verbose) sp->print_packet();
-    src_ip = sp->get_ip_address();
-
-    /* determine if we should output the packet */
-    wtf = true;
-    /* Not writing per host, keep track of num processed */ 
-    if(!has_ip_map)
-    {
-        /* Exit when done */
-        if(config.num_packets != 0 && packets_processed >= config.num_packets) exit(0);
-        packets_processed++;
-    }
-    /* Writing per host */
-    else
-    {
-        mit = m.find(src_ip);
-        /* IP not been seen yet */
-        if(mit == m.end())
-        {
-            wtf = false;
-        }
-        /* IP in map, check if we've surpassed total packets to process for IP */
-        else
-        {
-            if((mit->second >= config.num_packets) && config.num_packets != 0) wtf = false;
-            mit->second++;
-        }
-    }
+    /* Exit when done */
+    if(config.num_packets != 0 && packets_processed >= config.num_packets) exit(0);
+    packets_processed++;
     
-    if(wtf)
-    {
-        return sp;
-    }
-    else
-    {
-        delete sp;
-        return NULL;
-    }
-
+    return sp;
 }
 
 void FileParser::write_output(SuperPacket *sp)

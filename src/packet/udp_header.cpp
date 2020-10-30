@@ -41,3 +41,19 @@ void UDPHeader::get_bitstring_header(std::vector<std::string> &to_fill)
 
     PacketHeader::make_bitstring_header(v, to_fill);
 }
+
+std::string UDPHeader::get_port(bool src)
+{
+    if(raw == NULL)
+    {
+        return "NULL";
+    }
+    else if(src)
+    {
+        return std::to_string(raw->uh_sport);
+    }
+    else
+    {
+        return std::to_string(raw->uh_dport);
+    }
+}

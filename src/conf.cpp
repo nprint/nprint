@@ -23,6 +23,7 @@ Config::Config()
     this->nprint = 0;
     this->verbose = 0;
     this->live_capture = 0;
+    this->output_index = 0;
     this->infile = NULL;
     this->filter = NULL;
     this->ip_file = NULL;

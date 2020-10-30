@@ -55,3 +55,19 @@ void TCPHeader::get_bitstring_header(std::vector<std::string> &to_fill)
 
     PacketHeader::make_bitstring_header(v, to_fill);
 }
+
+std::string TCPHeader::get_port(bool src)
+{
+    if(raw == NULL)
+    {
+        return "NULL";
+    }
+    else if(src)
+    {
+        return std::to_string(raw->th_sport);
+    }
+    else
+    {
+       return std::to_string(raw->th_dport); 
+    }
+}

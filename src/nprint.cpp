@@ -29,7 +29,12 @@ static struct argp_option options[] =
         {"nPrint_file", 'N', "FILE", 0, "nPrint infile"},
         {"csv_file", 'C', "FILE", 0, "csv (hex packets) infile"},
         {"write_file", 'W', "FILE", 0, "file for output, else stdout"},
-        {"ip_file", 'I', "FILE", 0, "file of IP addresses to filter with (1 per line), can be combined with num_packets for num_packets per ip"},
+        {"write_index", 'O', "INTEGER", 0, R"""(Output file Index (first column) Options:
+                                                  0: source IP (default)
+                                                  1: destination IP
+                                                  2: source port
+                                                  3: destination port
+                                                  4: flow (5-tuple))"""},
         {"eth",  'e', 0, 0, "include eth headers"},
         {"ipv4", '4', 0, 0, "include ipv4 headers"},
         {"ipv6", '6', 0, 0, "include ipv6 headers"},
@@ -74,9 +79,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
         case 'W':
             arguments->outfile = arg;
             break;
-        case 'I':
-            arguments->ip_file = arg;
-            break;
         case 'e':
             arguments->eth = 1;
             break;
@@ -100,6 +102,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
             break;
         case 'R':
             arguments->relative_timestamps = 1;
+            break;
+        case 'O':
+            arguments->index = atoi(arg);
+            if(arguments->index > 4 || arguments->index < 0)
+            {
+                fprintf(stderr, "invald index configuration, exiting\n");
+                exit(3);
+            }
             break;
 
         default: return ARGP_ERR_UNKNOWN;

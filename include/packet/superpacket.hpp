@@ -27,10 +27,12 @@ class SuperPacket
 {
     public:
         SuperPacket(void *pkt, uint32_t max_payload_len);
+        std::string get_port(bool src);
+        std::string get_ip_address(bool src);
         void print_packet();
-        std::string get_ip_address();
         bool check_parseable() { return parseable; };
         void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
+        std::string get_index(Config *c);
     private:
         bool process_v4(void *pkt);
         bool process_v6(void *pkt);

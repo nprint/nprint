@@ -57,8 +57,6 @@ void IPv4Header::get_bitstring_header(std::vector<std::string> &to_fill)
     PacketHeader::make_bitstring_header(v, to_fill);
 }
 
-
-
 /* Header Specific */
 
 std::string IPv4Header::get_src_ip() { return std::string(inet_ntoa(raw->ip_src)); }

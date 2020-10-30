@@ -10,6 +10,8 @@
 
 #include <cstddef>
 #include <stdint.h>
+#include <map>
+#include<string>
 
 /* 
  * Config class is a container to hold command line arguments
@@ -27,21 +29,28 @@ class Config
         uint8_t udp;
         uint8_t icmp;
         uint32_t payload;
-        uint8_t relative_timestamps;
 
         /*  Output modification */
-        uint8_t live_capture;
-        uint8_t verbose;
         uint8_t csv;
         uint8_t pcap;
+        uint8_t index;
         uint8_t nprint;
+        uint8_t verbose;
+        uint8_t live_capture;
+        uint8_t output_index;
+        uint8_t relative_timestamps;
         int8_t fill_with;
         uint64_t num_packets;
+        char *device;
         char *filter;
         char *infile;
-        char *outfile;
         char *ip_file;
-        char *device;
+        char *outfile;
+        std::map<uint8_t, std::string> index_map = {{0, "src_ip"}, 
+                                                    {1, "dst_ip"},
+                                                    {2, "src_prt"},
+                                                    {3, "dst_prt"},
+                                                    {4, "flow"}};
 };
 
 #endif
