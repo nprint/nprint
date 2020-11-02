@@ -79,7 +79,6 @@ std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::str
     ICMPHeader icmp;
     Payload p;
     
-    printf("building bitstirng header\n");
     /* Need to inform the payload of the max len */
     p.set_info(0, config.payload);
     
