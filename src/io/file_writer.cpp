@@ -9,15 +9,51 @@
 
 void FileWriter::set_conf(Config c)
 {
-    this->config = c;
     if(c.outfile == NULL)
     {
         this->outfile = stdout;
     }
     else
     {
-        this->outfile = fopen(c.outfile, "w");
+        if(std::string(c.outfile).find('/') == std::string::npos)
+        {
+            this->outfile = fopen(c.outfile, "w");
+        }
+        else
+        {
+            this->outfile = fopen_mkdir(c.outfile);
+        }
     }
+}
+
+void FileWriter::recursive_mkdir(char *path) 
+{
+    char *sep;
+    
+    sep = strrchr(path, '/');
+    if(sep != NULL) {
+        *sep = 0;
+        recursive_mkdir(path);
+        *sep = '/';
+    }
+    if(mkdir(path, 0777) && errno != EEXIST)
+    {
+        printf("error while trying to create '%s'", path); 
+    }
+}
+
+FILE *FileWriter::fopen_mkdir(char *path) 
+{
+    char *sep, *path0;
+
+    sep = strrchr(path, '/');
+    if(sep) { 
+        path0 = strdup(path);
+        path0[ sep - path ] = 0;
+        recursive_mkdir(path0);
+        free(path0);
+    }
+    return fopen(path, "w");
 }
 
 void FileWriter::write_header(std::vector<std::string> header)

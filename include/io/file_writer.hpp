@@ -8,7 +8,11 @@
 #ifndef FILE_WRITER
 #define FILE_WRITER
 
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "conf.hpp"
 #include "ethernet_header.hpp"
@@ -35,6 +39,8 @@ class FileWriter
                                std::vector<std::string> &fields_vec);
         void write_line(std::string &line);
     private:
+        void recursive_mkdir(char *path);
+        FILE *fopen_mkdir(char *path);
         Config config;
         std::vector<std::string> build_bitstring_header(std::vector<std::string> &header);
         uint32_t payload_len;
