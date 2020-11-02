@@ -9,6 +9,7 @@
 
 void FileWriter::set_conf(Config c)
 {
+    this->config = c;
     if(c.outfile == NULL)
     {
         this->outfile = stdout;
@@ -78,6 +79,7 @@ std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::str
     ICMPHeader icmp;
     Payload p;
     
+    printf("building bitstirng header\n");
     /* Need to inform the payload of the max len */
     p.set_info(0, config.payload);
     
@@ -88,6 +90,7 @@ std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::str
     if(config.udp == 1)   udp.get_bitstring_header(header);
     if(config.icmp == 1)  icmp.get_bitstring_header(header);
     if(config.payload != 0) p.get_bitstring_header(header);
+    
 
     return header;
 }
