@@ -5,30 +5,30 @@
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-#ifndef NPRINT_PARSER 
+#ifndef NPRINT_PARSER
 #define NPRINT_PARSER
 
-#include <tuple> 
+#include <tuple>
 
-#include <pcap.h>
 #include <netinet/ip.h>
+#include <pcap.h>
 
 #include "file_parser.hpp"
 #include "superpacket.hpp"
 
-/* 
+/*
  * NprintParser is used to transform any nPrint back to a PCAP
-*/
+ */
 
-class NprintParser : public FileParser
-{
-    public: 
-        void process_file();
-        void format_and_write_header();
-    private:
-        std::string clean_line(std::string &line);
-        uint8_t *transform_bitstring(std::string &bits);
-        std::tuple<void *, uint64_t> parse_packet(std::string &bits);
+class NprintParser : public FileParser {
+  public:
+    void process_file();
+    void format_and_write_header();
+
+  private:
+    std::string clean_line(std::string &line);
+    uint8_t *transform_bitstring(std::string &bits);
+    std::tuple<void *, uint64_t> parse_packet(std::string &bits);
 };
 
 #endif

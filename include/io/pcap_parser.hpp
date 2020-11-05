@@ -18,24 +18,25 @@
 
 #include "file_parser.hpp"
 
-/* 
+/*
  * Parses a PCAP from a written file
-*/
+ */
 
-class PCAPParser : public FileParser
-{
-    public: 
-        PCAPParser();
-        void process_file();
-        void format_and_write_header();
-        static void packet_handler(u_char *user_data, const struct pcap_pkthdr* pkthdr,
-                                   const u_char* packet);
-        int64_t process_timestamp(struct timeval ts);
-    private:
-        pcap_t *get_pcap_handle();
-        pcap_t *open_live_handle();
-        std::vector<std::string> to_fill;
-        struct timeval mrt;
+class PCAPParser : public FileParser {
+  public:
+    PCAPParser();
+    void process_file();
+    void format_and_write_header();
+    static void packet_handler(u_char *user_data,
+                               const struct pcap_pkthdr *pkthdr,
+                               const u_char *packet);
+    int64_t process_timestamp(struct timeval ts);
+
+  private:
+    pcap_t *get_pcap_handle();
+    pcap_t *open_live_handle();
+    std::vector<std::string> to_fill;
+    struct timeval mrt;
 };
 
 #endif

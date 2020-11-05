@@ -10,21 +10,21 @@
 
 #include "file_parser.hpp"
 
-/* 
+/*
  * StringfileParser parses hex encoded packets in a CSV.For example, the
  * output of a zmap scan
-*/
+ */
 
-class StringfileParser : public FileParser
-{
-    public: 
-        void process_file();
-        void format_and_write_header();
-    private:
-        uint32_t num_cols;
-        int hex_value(char hex_digit);
-        void format_custom_output(std::vector<std::string> &tokens);
-        std::string hex_to_string(std::string input);
+class StringfileParser : public FileParser {
+  public:
+    void process_file();
+    void format_and_write_header();
+
+  private:
+    uint32_t num_cols;
+    int hex_value(char hex_digit);
+    void format_custom_output(std::vector<std::string> &tokens);
+    std::string hex_to_string(std::string input);
 };
 
 #endif

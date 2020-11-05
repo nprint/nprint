@@ -9,42 +9,43 @@
 #define FILE_WRITER
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
 #include "conf.hpp"
 #include "ethernet_header.hpp"
+#include "icmp_header.hpp"
 #include "ipv4_header.hpp"
 #include "ipv6_header.hpp"
+#include "payload.hpp"
 #include "tcp_header.hpp"
 #include "udp_header.hpp"
-#include "icmp_header.hpp"
-#include "payload.hpp"
 
 /*
  * FileWriter takes care of output for all nPrints
-*/
+ */
 
-class FileWriter
-{
-    public:
-        void set_conf(Config c);
-        void write_header(std::vector<std::string> header);
-        void write_csv_stringvec(std::vector<std::string> &v);
-        void write_bitstring_line(std::vector<std::string> &prefix, 
-                                  std::vector<int8_t> &bistring_vec);
-        void write_fields_line(std::vector<std::string> &prefix,
-                               std::vector<std::string> &fields_vec);
-        void write_line(std::string &line);
-    private:
-        void recursive_mkdir(char *path);
-        FILE *fopen_mkdir(char *path);
-        Config config;
-        std::vector<std::string> build_bitstring_header(std::vector<std::string> &header);
-        uint32_t payload_len;
-        FILE *outfile = NULL;
+class FileWriter {
+  public:
+    void set_conf(Config c);
+    void write_header(std::vector<std::string> header);
+    void write_csv_stringvec(std::vector<std::string> &v);
+    void write_bitstring_line(std::vector<std::string> &prefix,
+                              std::vector<int8_t> &bistring_vec);
+    void write_fields_line(std::vector<std::string> &prefix,
+                           std::vector<std::string> &fields_vec);
+    void write_line(std::string &line);
+
+  private:
+    void recursive_mkdir(char *path);
+    FILE *fopen_mkdir(char *path);
+    Config config;
+    std::vector<std::string>
+    build_bitstring_header(std::vector<std::string> &header);
+    uint32_t payload_len;
+    FILE *outfile = NULL;
 };
 
 #endif
