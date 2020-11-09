@@ -8,10 +8,11 @@
 #ifndef SUPERPACKET
 #define SUPERPACKET
 
-#include <arpa/inet.h>
+#include <tuple>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 #include "conf.hpp"
 #include "ethernet_header.hpp"
@@ -31,6 +32,7 @@ class SuperPacket {
     bool check_parseable() {
         return parseable;
     };
+    std::tuple<uint8_t, uint8_t> get_packet_type();
     void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
     std::string get_index(Config *c);
 

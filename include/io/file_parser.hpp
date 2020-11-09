@@ -10,18 +10,20 @@
 
 #include <algorithm>
 #include <arpa/inet.h>
-#include <fstream>
 #include <map>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <csignal>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
-#include <vector>
 
 #include "conf.hpp"
 #include "file_writer.hpp"
 #include "superpacket.hpp"
+#include "stats.hpp"
 
 /*
  * File parser abstract class, any input file type that is new must conform to
@@ -33,6 +35,7 @@ class FileParser {
     virtual ~FileParser(){};
     virtual void process_file() = 0;
     virtual void format_and_write_header() = 0;
+    void print_stats();
     void set_conf(Config c);
     void set_filewriter(FileWriter *fw);
     SuperPacket *process_packet(void *pkt);
@@ -40,10 +43,11 @@ class FileParser {
                        char delimiter = ',');
 
   protected:
+    Stats stat;
     Config config;
     FileWriter *fw;
-    uint32_t packets_processed;
     void write_output(SuperPacket *sp);
+    //static void signal_handler(int signum);
 
     std::vector<std::string> custom_output;
     std::vector<int8_t> bitstring_vec;
