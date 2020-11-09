@@ -83,6 +83,7 @@ bool SuperPacket::process_v4(void *pkt) {
             ipv4_header.get_total_len() -
             (ipv4_header.get_header_len() + icmp_header.get_header_len());
     } else {
+        printf("not parseable but v4\n");
         return false;
     }
     payload.set_raw(pload);
@@ -129,6 +130,7 @@ bool SuperPacket::process_v6(void *pkt) {
             ipv6_header.get_total_len() -
             (ipv6_header.get_header_len() + icmp_header.get_header_len());
     } else {
+        printf("not parseable but v6\n");
         return false;
     }
     payload.set_raw(pload);
@@ -218,4 +220,23 @@ std::string SuperPacket::get_port(bool src) {
     } else {
         return "NULL";
     }
+}
+
+std::tuple<uint8_t, uint8_t> SuperPacket::get_packet_type() {
+    uint8_t network_layer, transport_layer;
+
+    if (ipv4_header.get_raw() != NULL) {
+        network_layer = 4;
+        transport_layer = ipv4_header.get_ip_proto();
+    }
+    else if(ipv6_header.get_raw() != NULL) {
+        network_layer = 6;
+        transport_layer = ipv6_header.get_ip_proto();
+    }
+    else {
+        network_layer = 0;
+        transport_layer = 0;
+    }
+
+    return std::tuple<uint8_t, uint8_t>(network_layer, transport_layer);
 }

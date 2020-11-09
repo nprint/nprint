@@ -146,6 +146,7 @@ int main(int argc, char **argv) {
         pcap_parser->set_filewriter(fw);
         pcap_parser->set_conf(config);
         pcap_parser->process_file();
+        pcap_parser->print_stats();
         delete pcap_parser;
     } else {
         if ((config.pcap + config.csv + config.nprint) > 1) {
@@ -157,12 +158,14 @@ int main(int argc, char **argv) {
             pcap_parser->set_filewriter(fw);
             pcap_parser->set_conf(config);
             pcap_parser->process_file();
+            pcap_parser->print_stats();
             delete pcap_parser;
         } else if (config.csv == 1) {
             stringfile_parser = new StringfileParser();
             stringfile_parser->set_filewriter(fw);
             stringfile_parser->set_conf(config);
             stringfile_parser->process_file();
+            stringfile_parser->print_stats();
             delete stringfile_parser;
         } else if (config.nprint == 1) {
             /* need an outfile for nprint, can't print pcap to stdout */
@@ -174,6 +177,7 @@ int main(int argc, char **argv) {
                 nprint_parser = new NprintParser();
                 nprint_parser->set_conf(config);
                 nprint_parser->process_file();
+                nprint_parser->print_stats();
                 delete nprint_parser;
             }
         } else {

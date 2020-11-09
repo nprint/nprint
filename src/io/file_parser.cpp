@@ -9,10 +9,8 @@
 
 #define CUSTOM_OUTPUT_RESERVE_SIZE 50
 #define BITSTRING_RESERVE_SIZE 10000
-#define FIELDS_RESERVE_SIZE 300
 
 void FileParser::set_conf(Config c) {
-    packets_processed = 0;
     this->config = c;
 
     /* Write header when we set the config */
@@ -21,7 +19,6 @@ void FileParser::set_conf(Config c) {
     /* Reserve vectors and use them the entire time */
     custom_output.reserve(CUSTOM_OUTPUT_RESERVE_SIZE);
     bitstring_vec.reserve(BITSTRING_RESERVE_SIZE);
-    fields_vec.reserve(FIELDS_RESERVE_SIZE);
 }
 
 void FileParser::set_filewriter(FileWriter *fw) {
@@ -41,25 +38,33 @@ void FileParser::tokenize_line(std::string line,
 }
 
 SuperPacket *FileParser::process_packet(void *pkt) {
+    bool parseable;
     SuperPacket *sp;
     std::string src_ip;
     std::vector<std::string> to_fill;
     std::map<std::string, std::uint32_t>::iterator mit;
+    uint8_t network_layer, transport_layer;
 
     to_fill.clear();
     sp = new SuperPacket(pkt, config.payload);
-    if (!sp->check_parseable()) {
+    parseable = sp->check_parseable();
+    if (!parseable) {
         delete sp;
-        return NULL;
+        sp = NULL;
+        network_layer = 0;
+        transport_layer = 0;
     }
-
-    if (config.verbose)
-        sp->print_packet();
-    /* Exit when done */
-    if (config.num_packets != 0 && packets_processed >= config.num_packets)
-        exit(0);
-    packets_processed++;
-
+    else {
+        if (config.verbose)
+            sp->print_packet();
+        /* Exit when done */
+        if (config.num_packets != 0 && stat.get_packets_processed() >= config.num_packets)
+            exit(0);
+        std::tie(network_layer, transport_layer) = sp->get_packet_type();
+    }
+    
+    stat.update(parseable, network_layer, transport_layer);
+    
     return sp;
 }
 
@@ -68,5 +73,10 @@ void FileParser::write_output(SuperPacket *sp) {
     fw->write_bitstring_line(custom_output, bitstring_vec);
     bitstring_vec.clear();
     custom_output.clear();
+    
     delete sp;
+}
+
+void FileParser::print_stats() {
+    stat.print_stats();
 }
