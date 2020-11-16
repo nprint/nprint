@@ -1,7 +1,7 @@
 # Details
 Overview / Original nPrint paper can be found [here](https://nprint.github.io/nprint/).
 
-Detailed usage and installation information can be found in the [nPrint wiki](https://github.com/nprint/nprint/wiki)
+Detailed usage and installation information can be found in the [nPrint wiki](https://github.com/nprint/nprint/wiki).
 
 For a fully automated traffic analysis pipeline, see [nPrintML](https://github.com/nprint/nprintML), which combines nPrint and AutoML.
 
