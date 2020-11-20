@@ -70,8 +70,8 @@ std::string TCPHeader::get_port(bool src) {
     if (raw == NULL) {
         return "NULL";
     } else if (src) {
-        return std::to_string(raw->th_sport);
+        return std::to_string(ntohs(raw->th_sport));
     } else {
-        return std::to_string(raw->th_dport);
+        return std::to_string(ntohs(raw->th_dport));
     }
 }

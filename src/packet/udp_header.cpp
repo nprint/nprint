@@ -48,8 +48,8 @@ std::string UDPHeader::get_port(bool src) {
     if (raw == NULL) {
         return "NULL";
     } else if (src) {
-        return std::to_string(raw->uh_sport);
+        return std::to_string(ntohs(raw->uh_sport));
     } else {
-        return std::to_string(raw->uh_dport);
+        return std::to_string(ntohs(raw->uh_dport));
     }
 }
