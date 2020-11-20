@@ -1,8 +1,19 @@
 # Details
-Overview / Original nPrint paper can be found here: https://nprint.github.io/nprint/
+Overview / Original nPrint paper can be found [here](https://nprint.github.io/nprint/).
 
-Detailed usage and installation information can be found in the nPrint wiki: https://github.com/nprint/nprint/wiki
+Detailed usage and installation information can be found in the [nPrint wiki](https://github.com/nprint/nprint/wiki).
 
-There is a very basic end-to-end tutorial on nPrint in a machine learning pipeline here: https://github.com/nprint/nprint/blob/master/example/nprint-ml-tutorial.ipynb
+For a fully automated traffic analysis pipeline, see [nPrintML](https://github.com/nprint/nprintML), which combines nPrint and AutoML.
 
 There will be bugs! Please report any you see.
+
+## Citing nPrint
+
+```
+@article{holland2020nprint,
+  title={nPrint: A Standard Data Representation for Network Traffic Analysis},
+  author={Holland, Jordan and Schmitt, Paul and Feamster, Nick and Mittal, Prateek},
+  journal={arXiv preprint arXiv:2008.02695},
+  year={2020}
+}
+```
