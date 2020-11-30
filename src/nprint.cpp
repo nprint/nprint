@@ -16,6 +16,7 @@
 #include "pcap_parser.hpp"
 #include "stringfile_parser.hpp"
 
+
 const char *argp_program_version = "nprint 1.1.1";
 const char *argp_program_bug_address = "https://github.com/nprint/nprint";
 static char doc[] =
@@ -36,6 +37,8 @@ static struct argp_option options[] = {
                                                   2: source port
                                                   3: destination port
                                                   4: flow (5-tuple))"""},
+    {"stats", 'S', 0, 0, "print stats about packets processed when finished"},
+    {"fill_int", 'F', "INT8_T", 0, "integer to fill missing bits with"}, 
     {"eth", 'e', 0, 0, "include eth headers"},
     {"ipv4", '4', 0, 0, "include ipv4 headers"},
     {"ipv6", '6', 0, 0, "include ipv6 headers"},
@@ -80,6 +83,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'W':
         arguments->outfile = arg;
+        break;
+    case 'F':
+        arguments->fill_with = atoi(arg);
+        break;
+    case 'S':
+        arguments->stats = 1;
         break;
     case 'e':
         arguments->eth = 1;
@@ -146,7 +155,9 @@ int main(int argc, char **argv) {
         pcap_parser->set_filewriter(fw);
         pcap_parser->set_conf(config);
         pcap_parser->process_file();
-        pcap_parser->print_stats();
+        if(config.stats == 1) {
+            pcap_parser->print_stats();
+        }
         delete pcap_parser;
     } else {
         if ((config.pcap + config.csv + config.nprint) > 1) {
@@ -158,14 +169,18 @@ int main(int argc, char **argv) {
             pcap_parser->set_filewriter(fw);
             pcap_parser->set_conf(config);
             pcap_parser->process_file();
-            pcap_parser->print_stats();
+            if(config.stats == 1) {
+                pcap_parser->print_stats();
+            }
             delete pcap_parser;
         } else if (config.csv == 1) {
             stringfile_parser = new StringfileParser();
             stringfile_parser->set_filewriter(fw);
             stringfile_parser->set_conf(config);
             stringfile_parser->process_file();
-            stringfile_parser->print_stats();
+            if(config.stats == 1) {
+                stringfile_parser->print_stats();
+            }
             delete stringfile_parser;
         } else if (config.nprint == 1) {
             /* need an outfile for nprint, can't print pcap to stdout */
@@ -177,7 +192,9 @@ int main(int argc, char **argv) {
                 nprint_parser = new NprintParser();
                 nprint_parser->set_conf(config);
                 nprint_parser->process_file();
-                nprint_parser->print_stats();
+                if(config.stats == 1) {
+                    nprint_parser->print_stats();
+                }
                 delete nprint_parser;
             }
         } else {

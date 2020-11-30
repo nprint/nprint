@@ -30,6 +30,7 @@ class Config {
     uint32_t payload;
 
     /*  Output modification */
+    uint8_t stats;
     uint8_t csv;
     uint8_t pcap;
     uint8_t index;
