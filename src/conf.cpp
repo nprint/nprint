@@ -20,6 +20,7 @@ Config::Config() {
     this->relative_timestamps = 0;
     this->pcap = 0;
     this->csv = 0;
+    this->stats = 0;
     this->nprint = 0;
     this->verbose = 0;
     this->live_capture = 0;
