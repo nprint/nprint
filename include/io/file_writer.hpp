@@ -8,6 +8,7 @@
 #ifndef FILE_WRITER
 #define FILE_WRITER
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
