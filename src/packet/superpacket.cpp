@@ -83,7 +83,6 @@ bool SuperPacket::process_v4(void *pkt) {
             ipv4_header.get_total_len() -
             (ipv4_header.get_header_len() + icmp_header.get_header_len());
     } else {
-        printf("not parseable but v4\n");
         return false;
     }
     payload.set_raw(pload);
@@ -130,7 +129,6 @@ bool SuperPacket::process_v6(void *pkt) {
             ipv6_header.get_total_len() -
             (ipv6_header.get_header_len() + icmp_header.get_header_len());
     } else {
-        printf("not parseable but v6\n");
         return false;
     }
     payload.set_raw(pload);
