@@ -17,7 +17,7 @@
 #include "stringfile_parser.hpp"
 
 
-const char *argp_program_version = "nprint 1.1.1";
+const char *argp_program_version = "nprint 1.1.3";
 const char *argp_program_bug_address = "https://github.com/nprint/nprint";
 static char doc[] =
     "Full information can be found at https://nprint.github.io/nprint/";
