@@ -8,6 +8,7 @@
 #ifndef FILE_WRITER
 #define FILE_WRITER
 
+#include <regex>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,8 +44,8 @@ class FileWriter {
     void recursive_mkdir(char *path);
     FILE *fopen_mkdir(char *path);
     Config config;
-    std::vector<std::string>
-    build_bitstring_header(std::vector<std::string> &header);
+    std::vector<uint32_t> keep_indexes;
+    std::vector<std::string> build_bitstring_header(std::vector<std::string> header);
     uint32_t payload_len;
     FILE *outfile = NULL;
 };
