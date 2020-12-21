@@ -12,10 +12,9 @@
 
 #include "conf.hpp"
 #include "file_writer.hpp"
-#include "nprint_parser.hpp"
 #include "pcap_parser.hpp"
+#include "nprint_parser.hpp"
 #include "stringfile_parser.hpp"
-
 
 const char *argp_program_version = "nprint 1.1.3";
 const char *argp_program_bug_address = "https://github.com/nprint/nprint";
@@ -30,6 +29,8 @@ static struct argp_option options[] = {
     {"nPrint_file", 'N', "FILE", 0, "nPrint infile"},
     {"csv_file", 'C', "FILE", 0, "csv (hex packets) infile"},
     {"write_file", 'W', "FILE", 0, "file for output, else stdout"},
+    {"nprint_filter", 'x', "STRING", 0, "regex to filter bits out of nPrint. nprint -h for details"},
+    {"nprint_filter_help", 'h', 0, 0, "print regex possibilities"},
     {"write_index", 'O', "INTEGER", 0,
      R"""(Output file Index (first column) Options:
                                                   0: source IP (default)
@@ -50,10 +51,92 @@ static struct argp_option options[] = {
     {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
     {"verbose", 'V', 0, 0, "print human readable packets with nPrints"},
     {0}};
+     
+const char *filter_help = R"""(
+################################################################################
+### nPrint Regex Filter Help:
+### All field names follow syntax: proto_field_bit
+### Each protocol in help follow syntax: proto field numbits
+
+# Ethernet
+eth eth_dhost      48
+eth eth_shost      48
+eth eth_ethertype  16
+
+# IPv4
+ipv4 ipv4_ver       4
+ipv4 ipv4_hl        4
+ipv4 ipv4_tos       8
+ipv4 ipv4_tl       16
+ipv4 ipv4_id       16
+ipv4 ipv4_rbit      1
+ipv4 ipv4_dfbit     1
+ipv4 ipv4_mfbit     1
+ipv4 ipv4_foff     13
+ipv4 ipv4_ttl       8
+ipv4 ipv4_proto     8
+ipv4 ipv4_cksum    16
+ipv4 ipv4_src      32
+ipv4 ipv4_dst      32
+ipv4 ipv4_opt     320
+
+# IPv6
+ipv6 ipv6_ver       4
+ipv6 ipv6_tc        8
+ipv6 ipv6_fl       20
+ipv6 ipv6_len      16
+ipv6 ipv6_nh        8
+ipv6 ipv6_hl        8
+ipv6 ipv6_src     128
+ipv6 ipv6_dst     128
+
+# TCP 
+tcp tcp_sprt       16
+tcp tcp_dprt       16
+tcp tcp_seq        32
+tcp tcp_ackn       32
+tcp tcp_doff        4
+tcp tcp_res         3
+tcp tcp_ns          1
+tcp tcp_cwr         1
+tcp tcp_ece         1
+tcp tcp_urg         1
+tcp tcp_ackf        1
+tcp tcp_psh         1
+tcp tcp_rst         1
+tcp tcp_syn         1
+tcp tcp_wsize      16
+tcp tcp_cksum      16
+tcp tcp_urp        16
+tcp tcp_opt       320
+
+# UDP
+udp udp_sport      16
+udp udp_dport      16
+udp udp_len        16
+udp udp_cksum      16
+
+# ICMP
+icmp icmp_type     8
+icmp icmp_code     8
+icmp icmp_cksum    16
+icmp icmp_roh      32
+
+# Payload
+payload payload_bit n
+
+
+### End of nPrint regex filter help, exiting
+################################################################################)""";
+
+
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     Config *arguments = (Config *)state->input;
     switch (key) {
+    case 'h':
+        printf("%s\n", filter_help);
+        exit(0);
     case 'A':
         arguments->absolute_timestamps = 1;
         break;
@@ -68,6 +151,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'c':
         arguments->num_packets = atoi(arg);
+        break;
+    case 'x':
+        arguments->regex = arg;
         break;
     case 'P':
         arguments->infile = arg;
@@ -205,3 +291,5 @@ int main(int argc, char **argv) {
     delete fw;
     return 0;
 }
+
+

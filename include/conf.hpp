@@ -8,10 +8,10 @@
 #ifndef CONF
 #define CONF
 
-#include <cstddef>
 #include <map>
-#include <stdint.h>
 #include <string>
+#include <cstddef>
+#include <stdint.h>
 
 /*
  * Config class is a container to hold command line arguments
@@ -44,6 +44,7 @@ class Config {
     uint64_t num_packets;
     char *device;
     char *filter;
+    char *regex;
     char *infile;
     char *ip_file;
     char *outfile;

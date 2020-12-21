@@ -53,20 +53,25 @@ void FileWriter::write_header(std::vector<std::string> header) {
         exit(2);
     }
 
-    build_bitstring_header(header);
-    write_csv_stringvec(header);
+    std::vector<std::string> compressed_header;
+
+    compressed_header = build_bitstring_header(header);
+    write_csv_stringvec(compressed_header);
 }
 
 std::vector<std::string>
-FileWriter::build_bitstring_header(std::vector<std::string> &header) {
+FileWriter::build_bitstring_header(std::vector<std::string> header) {
+    uint32_t i, prefix_len;
+    Payload p;
     EthHeader e;
     IPv4Header v4;
     IPv6Header v6;
     TCPHeader tcp;
     UDPHeader udp;
     ICMPHeader icmp;
-    Payload p;
+    std::vector<std::string> compressed_header;
 
+    prefix_len = header.size();
     /* Need to inform the payload of the max len */
     p.set_info(0, config.payload);
 
@@ -84,8 +89,24 @@ FileWriter::build_bitstring_header(std::vector<std::string> &header) {
         icmp.get_bitstring_header(header);
     if (config.payload != 0)
         p.get_bitstring_header(header);
-
-    return header;
+    
+    if(config.regex != NULL) {
+        std::regex str_regex(config.regex);
+        for (i = prefix_len; i < header.size(); i++) {
+            if(!regex_match(header[i], str_regex)) {
+                keep_indexes.push_back(i - prefix_len);
+                compressed_header.push_back(header[i]);
+            }
+        }
+    }
+    else {
+        for(i = 0; i < header.size(); i++) {
+            keep_indexes.push_back(i);
+            compressed_header.push_back(header[i]);
+        }
+    }
+    
+    return compressed_header;
 }
 
 void FileWriter::write_csv_stringvec(std::vector<std::string> &v) {
@@ -105,9 +126,9 @@ void FileWriter::write_bitstring_line(std::vector<std::string> &prefix,
 
     for (i = 0; i < prefix.size(); i++)
         fprintf(outfile, "%s,", prefix[i].c_str());
-    for (i = 0; i < bitstring_vec.size(); i++) {
-        fprintf(outfile, "%d", bitstring_vec[i]);
-        if (i != bitstring_vec.size() - 1)
+    for (i = 0; i < keep_indexes.size(); i++) {
+        fprintf(outfile, "%d", bitstring_vec[keep_indexes[i]]);
+        if (i != keep_indexes.size() - 1)
             fprintf(outfile, ",");
     }
     fprintf(outfile, "\n");

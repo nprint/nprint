@@ -25,6 +25,7 @@ Config::Config() {
     this->verbose = 0;
     this->live_capture = 0;
     this->output_index = 0;
+    this->regex = NULL;
     this->infile = NULL;
     this->filter = NULL;
     this->ip_file = NULL;
