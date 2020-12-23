@@ -89,6 +89,8 @@ FileWriter::build_bitstring_header(std::vector<std::string> header) {
         icmp.get_bitstring_header(header);
     if (config.payload != 0)
         p.get_bitstring_header(header);
+
+    for(i = 0; i < prefix_len; i++)  compressed_header.push_back(header[i]);
     
     if(config.regex != NULL) {
         std::regex str_regex(config.regex);
