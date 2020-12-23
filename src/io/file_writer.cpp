@@ -100,8 +100,8 @@ FileWriter::build_bitstring_header(std::vector<std::string> header) {
         }
     }
     else {
-        for(i = 0; i < header.size(); i++) {
-            keep_indexes.push_back(i);
+        for(i = prefix_len; i < header.size(); i++) {
+            keep_indexes.push_back(i - prefix_len);
             compressed_header.push_back(header[i]);
         }
     }
