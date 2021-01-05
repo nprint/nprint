@@ -14,7 +14,7 @@ Config::Config() {
     this->udp = 0;
     this->icmp = 0;
     this->payload = 0;
-    this->fill_with = 0;
+    this->fill_with = -1;
     this->num_packets = 0;
     this->absolute_timestamps = 0;
     this->relative_timestamps = 0;
