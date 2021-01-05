@@ -126,8 +126,15 @@ void FileWriter::write_bitstring_line(std::vector<std::string> &prefix,
                                       std::vector<int8_t> &bitstring_vec) {
     uint32_t i;
 
-    for (i = 0; i < prefix.size(); i++)
-        fprintf(outfile, "%s,", prefix[i].c_str());
+    for (i = 0; i < prefix.size(); i++) {
+        if(keep_indexes.size() == 0) {
+            fprintf(outfile, "%s", prefix[i].c_str());
+        }
+        else {
+            fprintf(outfile, "%s,", prefix[i].c_str());
+        } 
+    }
+
     for (i = 0; i < keep_indexes.size(); i++) {
         fprintf(outfile, "%d", bitstring_vec[keep_indexes[i]]);
         if (i != keep_indexes.size() - 1)
