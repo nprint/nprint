@@ -1,6 +1,6 @@
 /*
  * Copyright 2020 nPrint
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may notZ
  * use this file except in compliance with the License. You may obtain a copy
  * of the License at https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -88,7 +88,8 @@ pcap_t *PCAPParser::get_pcap_handle() {
     } else {
         f = open_live_handle();
     }
-
+    set_filter(f, config.filter);
+    
     return f;
 }
 
@@ -97,9 +98,6 @@ pcap_t *PCAPParser::open_live_handle() {
     pcap_t *handle;
     pcap_if_t *l;
     char errbuf[PCAP_ERRBUF_SIZE];
-    struct bpf_program fp;
-    bpf_u_int32 mask;
-    bpf_u_int32 net;
 
     /* get device */
     if (config.device == NULL) {
@@ -110,32 +108,43 @@ pcap_t *PCAPParser::open_live_handle() {
         }
         config.device = l->name;
     }
-    if (config.filter != NULL) {
-        /* get mask*/
-        if (pcap_lookupnet(config.device, &net, &mask, errbuf) == -1) {
-            fprintf(stderr, "Can't get netmask for device %s\n", config.device);
-            net = 0;
-            mask = 0;
-        }
-    }
     /* open device */
     handle = pcap_open_live(config.device, BUFSIZ, 1, 1000, errbuf);
     if (handle == NULL) {
         fprintf(stderr, "Couldn't open device: %s\n", errbuf);
         exit(2);
     }
-    if (config.filter != NULL) {
-        if (pcap_compile(handle, &fp, config.filter, 0, net) == -1) {
-            fprintf(stderr, "Couldn't parse filter %s: %s\n", config.filter,
+    
+    return handle;
+}
+
+void PCAPParser::set_filter(pcap_t *handle, char *filter) {
+    bpf_u_int32 net;
+    bpf_u_int32 mask;
+    struct bpf_program fp;
+    char errbuf[PCAP_ERRBUF_SIZE];
+
+    net = 0;
+    mask = 0;
+    if(config.live_capture != 0) {
+        if (filter != NULL) {
+            /* get mask*/
+            if (pcap_lookupnet(config.device, &net, &mask, errbuf) == -1) {
+                fprintf(stderr, "Can't get netmask for device %s\n", config.device);
+            }
+        }
+    }
+    
+    if (filter != NULL) {
+        if (pcap_compile(handle, &fp, filter, 0, net) == -1) {
+            fprintf(stderr, "Couldn't parse filter %s: %s\n", filter,
                     pcap_geterr(handle));
             exit(2);
         }
         if (pcap_setfilter(handle, &fp) == -1) {
-            fprintf(stderr, "Couldn't install filter %s: %s\n", config.filter,
+            fprintf(stderr, "Couldn't install filter %s: %s\n", filter,
                     pcap_geterr(handle));
             exit(2);
         }
     }
-
-    return handle;
 }

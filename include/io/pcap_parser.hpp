@@ -33,10 +33,12 @@ class PCAPParser : public FileParser {
     int64_t process_timestamp(struct timeval ts);
 
   private:
+    struct timeval mrt;
+    std::vector<std::string> to_fill;
+    
     pcap_t *get_pcap_handle();
     pcap_t *open_live_handle();
-    std::vector<std::string> to_fill;
-    struct timeval mrt;
+    void set_filter(pcap_t *handle, char *filter);
 };
 
 #endif
