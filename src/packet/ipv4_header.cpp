@@ -15,11 +15,11 @@ void IPv4Header::set_raw(void *raw) {
     this->raw = (struct ip *)raw;
 }
 
-void IPv4Header::print_header() {
+void IPv4Header::print_header(FILE *out) {
     if (raw == NULL) {
-        printf("IPv4Header: raw data not set\n");
+        fprintf(out, "IPv4Header: raw data not set\n");
     } else {
-        printf("IPv4Header: src_ip: %s, dst_ip: %s\n", inet_ntoa(raw->ip_src),
+        fprintf(out, "IPv4Header: src_ip: %s, dst_ip: %s\n", inet_ntoa(raw->ip_src),
                inet_ntoa(raw->ip_dst));
     }
 }

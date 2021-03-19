@@ -56,7 +56,7 @@ SuperPacket *FileParser::process_packet(void *pkt) {
     }
     else {
         if (config.verbose)
-            sp->print_packet();
+            sp->print_packet(stderr);
         /* Exit when done */
         if (config.num_packets != 0 && stat.get_packets_processed() >= config.num_packets)
             exit(0);

@@ -15,12 +15,12 @@ void TCPHeader::set_raw(void *raw) {
     this->raw = (struct tcphdr *)raw;
 }
 
-void TCPHeader::print_header() {
+void TCPHeader::print_header(FILE *out) {
     if (raw == NULL) {
-        printf("TCPHeader: raw data not set\n");
+        fprintf(out, "TCPHeader: raw data not set\n");
         return;
     }
-    printf("TCPHeader: src_prt: %d, dst_prt: %d\n", ntohs(raw->th_sport),
+    fprintf(out, "TCPHeader: src_prt: %d, dst_prt: %d\n", ntohs(raw->th_sport),
            ntohs(raw->th_dport));
 }
 

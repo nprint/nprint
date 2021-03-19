@@ -15,14 +15,14 @@ void EthHeader::set_raw(void *raw) {
     this->raw = (struct ether_header *)raw;
 }
 
-void EthHeader::print_header() {
+void EthHeader::print_header(FILE *out) {
     if (raw == NULL) {
-        printf("EthHeader: raw data not set\n");
+        fprintf(out, "EthHeader: raw data not set\n");
     } else {
-        printf("Eth Header: src: %02x:%02x:%02x:%02x:%02x:%02x, ",
+        fprintf(out, "Eth Header: src: %02x:%02x:%02x:%02x:%02x:%02x, ",
                raw->ether_shost[0], raw->ether_shost[1], raw->ether_shost[2],
                raw->ether_shost[3], raw->ether_shost[4], raw->ether_shost[5]);
-        printf("dst: %02x:%02x:%02x:%02x:%02x:%02x, ether_type: %u\n",
+        fprintf(out, "dst: %02x:%02x:%02x:%02x:%02x:%02x, ether_type: %u\n",
                raw->ether_dhost[0], raw->ether_dhost[1], raw->ether_dhost[2],
                raw->ether_dhost[3], raw->ether_dhost[4], raw->ether_dhost[5],
                ntohs(raw->ether_type));

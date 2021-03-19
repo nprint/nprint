@@ -24,7 +24,7 @@ class IPv4Header : public PacketHeader {
     /* Required Functions */
     void *get_raw();
     void set_raw(void *raw);
-    void print_header();
+    void print_header(FILE *out);
     uint32_t get_header_len();
     void get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with);
     void get_bitstring_header(std::vector<std::string> &to_fill);

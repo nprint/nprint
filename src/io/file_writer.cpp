@@ -30,7 +30,7 @@ void FileWriter::recursive_mkdir(char *path) {
         *sep = '/';
     }
     if (mkdir(path, 0777) && errno != EEXIST) {
-        printf("error while trying to create '%s'", path);
+        fprintf(stderr, "error while trying to create '%s'\n", path);
     }
 }
 
@@ -49,7 +49,7 @@ FILE *FileWriter::fopen_mkdir(char *path) {
 
 void FileWriter::write_header(std::vector<std::string> header) {
     if (outfile == NULL) {
-        printf("FileWriter output configuration not set\n");
+        fprintf(stderr, "FileWriter output configuration not set\n");
         exit(2);
     }
 

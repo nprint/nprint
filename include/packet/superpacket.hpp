@@ -28,7 +28,7 @@ class SuperPacket {
     SuperPacket(void *pkt, uint32_t max_payload_len);
     std::string get_port(bool src);
     std::string get_ip_address(bool src);
-    void print_packet();
+    void print_packet(FILE *out);
     bool check_parseable() {
         return parseable;
     };

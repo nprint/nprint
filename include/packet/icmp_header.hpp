@@ -26,7 +26,7 @@ class ICMPHeader : public PacketHeader {
     /* Required Functions */
     void *get_raw();
     void set_raw(void *raw);
-    void print_header();
+    void print_header(FILE *out);
     uint32_t get_header_len() {
         return 8;
     };
