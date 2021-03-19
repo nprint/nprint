@@ -7,15 +7,15 @@
 
 #include "superpacket.hpp"
 
-void SuperPacket::print_packet() {
+void SuperPacket::print_packet(FILE *out) {
     printf("Superpacket {\n");
-    ethernet_header.print_header();
-    ipv4_header.print_header();
-    ipv6_header.print_header();
-    tcp_header.print_header();
-    udp_header.print_header();
-    icmp_header.print_header();
-    payload.print_header();
+    ethernet_header.print_header(out);
+    ipv4_header.print_header(out);
+    ipv6_header.print_header(out);
+    tcp_header.print_header(out);
+    udp_header.print_header(out);
+    icmp_header.print_header(out);
+    payload.print_header(out);
     printf("}\n");
 }
 

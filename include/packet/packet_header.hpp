@@ -26,7 +26,7 @@ class PacketHeader {
     /* Virtual Functions */
     virtual void *get_raw() = 0;
     virtual void set_raw(void *raw) = 0;
-    virtual void print_header() = 0;
+    virtual void print_header(FILE *out) = 0;
     virtual uint32_t get_header_len() = 0;
     virtual void get_bitstring(std::vector<int8_t> &to_fill,
                                int8_t fill_with) = 0;

@@ -15,7 +15,7 @@ void IPv6Header::set_raw(void *raw) {
     this->raw = (struct ip6_hdr *)raw;
 }
 
-void IPv6Header::print_header() {
+void IPv6Header::print_header(FILE *out) {
 }
 
 uint32_t IPv6Header::get_header_len() {

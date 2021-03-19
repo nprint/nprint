@@ -15,13 +15,13 @@ void UDPHeader::set_raw(void *raw) {
     this->raw = (struct udphdr *)raw;
 }
 
-void UDPHeader::print_header() {
+void UDPHeader::print_header(FILE *out) {
     if (raw == NULL) {
-        printf("UDPHeader: raw data not set\n");
+        fprintf(out, "UDPHeader: raw data not set\n");
         return;
     }
 
-    printf("UDP header: srcprt: %u, dstprt: %u, len: %u, cksum: %u\n",
+    fprintf(out, "UDP header: srcprt: %u, dstprt: %u, len: %u, cksum: %u\n",
            ntohs(raw->uh_sport), ntohs(raw->uh_dport), ntohs(raw->uh_ulen),
            ntohs(raw->uh_sum));
 }

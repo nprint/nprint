@@ -15,8 +15,8 @@ void Payload::set_raw(void *raw) {
     this->raw = raw;
 }
 
-void Payload::print_header() {
-    printf("Payload: length: %d\n", n_bytes);
+void Payload::print_header(FILE *out) {
+    fprintf(out, "Payload: length: %d\n", n_bytes);
 }
 uint32_t Payload::get_header_len() {
     return n_bytes;

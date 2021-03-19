@@ -16,11 +16,11 @@ void ICMPHeader::set_raw(void *raw) {
     this->raw = (struct icmp *)raw;
 }
 
-void ICMPHeader::print_header() {
+void ICMPHeader::print_header(FILE *out) {
     if (raw == NULL) {
-        printf("ICMPHeader:: raw data not set\n");
+        fprintf(out, "ICMPHeader:: raw data not set\n");
     } else {
-        printf("icmp: type: %u, code: %u\n", raw->icmp_type, raw->icmp_code);
+        fprintf(out, "icmp: type: %u, code: %u\n", raw->icmp_type, raw->icmp_code);
     }
 }
 
