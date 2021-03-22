@@ -8,7 +8,7 @@
 #include "superpacket.hpp"
 
 void SuperPacket::print_packet(FILE *out) {
-    printf("Superpacket {\n");
+    fprintf(out, "Superpacket {\n");
     ethernet_header.print_header(out);
     ipv4_header.print_header(out);
     ipv6_header.print_header(out);
@@ -16,7 +16,7 @@ void SuperPacket::print_packet(FILE *out) {
     udp_header.print_header(out);
     icmp_header.print_header(out);
     payload.print_header(out);
-    printf("}\n");
+    fprintf(out, "}\n");
 }
 
 SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len) {
