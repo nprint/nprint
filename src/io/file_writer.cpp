@@ -22,11 +22,11 @@ void FileWriter::set_conf(Config c) {
 
 void FileWriter::recursive_mkdir(char *path) {
     char *sep;
-
+    
     sep = strrchr(path, '/');
     if (sep != NULL) {
         *sep = 0;
-        recursive_mkdir(path);
+        if(strcmp(path, "") != 0) recursive_mkdir(path);
         *sep = '/';
     }
     if (mkdir(path, 0777) && errno != EEXIST) {
