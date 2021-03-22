@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([nprint], [1.1.6], [jordanah@princeton.edu])
+AC_INIT([nprint], [1.1.7], [jordanah@princeton.edu])
 AC_CONFIG_SRCDIR([src/nprint.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
