@@ -37,9 +37,12 @@ static struct argp_option options[] = {
                                                   1: destination IP
                                                   2: source port
                                                   3: destination port
-                                                  4: flow (5-tuple))"""},
+                                                  4: flow (5-tuple)
+                                                  5: wlan tx mac)"""},
     {"stats", 'S', 0, 0, "print stats about packets processed when finished"},
     {"fill_int", 'F', "INT8_T", 0, "integer to fill missing bits with"}, 
+    {"radiotap", 'r', 0, 0, "include radiotap headers"},
+    {"wlan", 'w', 0, 0, "include wlan headers"},
     {"eth", 'e', 0, 0, "include eth headers"},
     {"ipv4", '4', 0, 0, "include ipv4 headers"},
     {"ipv6", '6', 0, 0, "include ipv6 headers"},
@@ -179,6 +182,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     case 'e':
         arguments->eth = 1;
         break;
+    case 'r':
+        arguments->radiotap = 1;
+        break;
+    case 'w':
+        arguments->wlan = 1;
+        break;
     case '4':
         arguments->ipv4 = 1;
         break;
@@ -226,10 +235,28 @@ int main(int argc, char **argv) {
 
     /* parse args */
     argp_parse(&argp, argc, argv, 0, 0, &config);
+    config.set_link_layer_type();
 
     /* File Writer handles writing nPrints */
     fw = new FileWriter;
     fw->set_conf(config);
+
+    /* The upper layers (Network-layer and Transport-layer) of wireless packets are encrypted.
+     * We may add decription support in a future version. */ 
+    if ((config.wireless + config.wired) > 1) {
+        fprintf(stderr, "Wireless packets can only use {-r, -w} protocol flags.\n");
+        exit(1);
+    }
+
+    /* The default index of wireless packest is tx_mac,
+     * The default index of wired packet is src_ip. */
+    // if (config.index == -1) {
+    //     if (config.wireless == 1) {
+    //         config.index = 5;
+    //     } else if (config.wired == 1) {
+    //         config.index = 0;
+    //     }
+    // } 
 
     /* No infile means processing live traffic. There is a way to delete this
      * code, but this is verbose */

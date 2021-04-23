@@ -15,6 +15,8 @@
 #include <arpa/inet.h>
 
 #include "conf.hpp"
+#include "radiotap_header.hpp"
+#include "wlan_header.hpp"
 #include "ethernet_header.hpp"
 #include "icmp_header.hpp"
 #include "ipv4_header.hpp"
@@ -25,9 +27,10 @@
 
 class SuperPacket {
   public:
-    SuperPacket(void *pkt, uint32_t max_payload_len);
+    SuperPacket(void *pkt, uint32_t max_payload_len, Config *c);
     std::string get_port(bool src);
     std::string get_ip_address(bool src);
+    std::string get_tx_mac_address();
     void print_packet(FILE *out);
     bool check_parseable() {
         return parseable;
@@ -35,6 +38,7 @@ class SuperPacket {
     std::tuple<uint8_t, uint8_t> get_packet_type();
     void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
     std::string get_index(Config *c);
+    Config *config;
 
   private:
     bool process_v4(void *pkt);
@@ -42,6 +46,8 @@ class SuperPacket {
 
     bool parseable;
     uint32_t max_payload_len;
+    RadiotapHeader radiotap_header;
+    WlanHeader wlan_header;
     EthHeader ethernet_header;
     IPv4Header ipv4_header;
     IPv6Header ipv6_header;

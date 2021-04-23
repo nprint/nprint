@@ -21,6 +21,8 @@ class Config {
   public:
     Config();
     /* Protocol flags */
+    uint8_t radiotap;
+    uint8_t wlan;
     uint8_t eth;
     uint8_t ipv4;
     uint8_t ipv6;
@@ -28,6 +30,11 @@ class Config {
     uint8_t udp;
     uint8_t icmp;
     uint32_t payload;
+
+    /* Link-layer types */
+    uint8_t wireless;
+    uint8_t wired;
+    void set_link_layer_type();
 
     /*  Output modification */
     uint8_t stats;
@@ -47,11 +54,12 @@ class Config {
     char *infile;
     char *ip_file;
     char *outfile;
-    std::map<uint8_t, std::string> index_map = {{0, "src_ip"},
+    std::map<int8_t, std::string> index_map = {{0, "src_ip"},
                                                 {1, "dst_ip"},
                                                 {2, "src_prt"},
                                                 {3, "dst_prt"},
-                                                {4, "flow"}};
+                                                {4, "flow"},
+                                                {5, "tx_mac"}};
 };
 
 #endif

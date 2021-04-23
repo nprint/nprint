@@ -46,7 +46,7 @@ SuperPacket *FileParser::process_packet(void *pkt) {
     uint8_t network_layer, transport_layer;
 
     to_fill.clear();
-    sp = new SuperPacket(pkt, config.payload);
+    sp = new SuperPacket(pkt, config.payload, &config);
     parseable = sp->check_parseable();
     if (!parseable) {
         delete sp;
