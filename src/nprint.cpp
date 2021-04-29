@@ -201,8 +201,8 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         arguments->relative_timestamps = 1;
         break;
     case 'O':
-        arguments->index = atoi(arg);
-        if (arguments->index > 4 || arguments->index < 0) {
+        arguments->output_index = atoi(arg);
+        if (arguments->output_index > 4 || arguments->output_index < 0) {
             fprintf(stderr, "invald index configuration, exiting\n");
             exit(3);
         }

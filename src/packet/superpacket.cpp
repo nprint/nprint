@@ -158,23 +158,23 @@ std::string SuperPacket::get_index(Config *c) {
     std::string rv;
     /* Source IP */
     /* Could switch here... */
-    if (c->index == 0) {
+    if (c->output_index == 0) {
         rv = get_ip_address(true);
     }
     /* DST IP */
-    else if (c->index == 1) {
+    else if (c->output_index == 1) {
         rv = get_ip_address(false);
     }
     /* Source Port */
-    else if (c->index == 2) {
+    else if (c->output_index == 2) {
         rv = get_port(true);
     }
     /* Dest Port */
-    else if (c->index == 3) {
+    else if (c->output_index == 3) {
         rv = get_port(false);
     }
     /* Flow */
-    else if (c->index == 4) {
+    else if (c->output_index == 4) {
         /* There is 99% probability a better way to do this. */
         rv = get_ip_address(true);
         rv += std::string("_") + get_ip_address(false);

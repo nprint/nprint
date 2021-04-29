@@ -33,7 +33,6 @@ class Config {
     uint8_t stats;
     uint8_t csv;
     uint8_t pcap;
-    uint8_t index;
     uint8_t nprint;
     uint8_t verbose;
     uint8_t live_capture;

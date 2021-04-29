@@ -56,7 +56,7 @@ void PCAPParser::packet_handler(u_char *user_data,
 
 void PCAPParser::format_and_write_header() {
     std::vector<std::string> header;
-    header.push_back(config.index_map.find(config.index)->second);
+    header.push_back(config.index_map.find(config.output_index)->second);
     if (config.relative_timestamps == 1)
         header.push_back("rts");
     if (config.absolute_timestamps == 1) {
