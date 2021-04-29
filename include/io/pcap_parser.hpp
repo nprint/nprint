@@ -14,6 +14,8 @@
 #include <net/ethernet.h>
 #endif
 
+#define LINUX_COOKED_HEADER_SIZE 16
+
 #include <pcap.h>
 
 #include "file_parser.hpp"
@@ -34,6 +36,7 @@ class PCAPParser : public FileParser {
 
   private:
     struct timeval mrt;
+    uint32_t linktype;
     std::vector<std::string> to_fill;
     
     pcap_t *get_pcap_handle();

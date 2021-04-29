@@ -20,6 +20,8 @@ void PCAPParser::process_file() {
     pcap_t *f;
 
     f = get_pcap_handle();
+    linktype = pcap_datalink(f);
+
     pcap_loop(f, 0, packet_handler, (u_char *)this);
     pcap_close(f);
 }
@@ -32,6 +34,10 @@ void PCAPParser::packet_handler(u_char *user_data,
     int64_t rts;
 
     pcp = (PCAPParser *)user_data;
+    
+    if(pcp->linktype == DLT_LINUX_SLL) {
+        packet = (uint8_t *) packet + LINUX_COOKED_HEADER_SIZE;
+    }
 
     sp = pcp->process_packet((void *)packet);
     if (sp == NULL)
