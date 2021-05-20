@@ -31,7 +31,7 @@ void WlanHeader::print_header(FILE *out) {
 }
 
 uint32_t WlanHeader::get_header_len() {
-    return 10;
+    return SIZE_WLAN_HEADER_BITSTRING;  // TODO: we only parse the first 10 bytes at this time 
 }
 
 void WlanHeader::get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with) {
@@ -40,8 +40,8 @@ void WlanHeader::get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with) {
 
 std::string WlanHeader::get_tx_mac() {
     switch (raw->type) {
-        // TODO: this list may not complete
-        case 0xc4:  // CTS ClearTo Send
+        //  3 subtypes have no TX max address
+        case 0xc4:  // CTS Clear To Send
         case 0xd4:  // ACK
         case 0xe4:  // CF-End
             return "None";

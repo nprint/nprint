@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <pcap.h>
 
 #include "conf.hpp"
 #include "radiotap_header.hpp"
@@ -27,7 +28,7 @@
 
 class SuperPacket {
   public:
-    SuperPacket(void *pkt, uint32_t max_payload_len, Config *c);
+    SuperPacket(void *pkt, uint32_t max_payload_len, uint32_t linktype);
     std::string get_port(bool src);
     std::string get_ip_address(bool src);
     std::string get_tx_mac_address();
@@ -38,7 +39,6 @@ class SuperPacket {
     std::tuple<uint8_t, uint8_t> get_packet_type();
     void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
     std::string get_index(Config *c);
-    Config *config;
 
   private:
     bool process_v4(void *pkt);

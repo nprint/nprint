@@ -10,6 +10,7 @@
 
 #include "packet_header.hpp"
 
+// TODO: we only parse the first 10 bytes at this time 
 #define SIZE_WLAN_HEADER_BITSTRING 10
 
 struct wlan_header {

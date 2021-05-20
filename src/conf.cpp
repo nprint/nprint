@@ -22,8 +22,6 @@ Config::Config() {
     this->relative_timestamps = 0;
     this->pcap = 0;
     this->csv = 0;
-    this->wireless = 0;
-    this->wired = 0;
     this->stats = 0;
     this->nprint = 0;
     this->verbose = 0;
@@ -35,13 +33,4 @@ Config::Config() {
     this->ip_file = NULL;
     this->outfile = NULL;
     this->device = NULL;
-}
-
-void Config::set_link_layer_type() {
-    if ((this->radiotap + this->wlan) > 0) {
-        this->wireless = 1;
-    }
-    if ((this->eth + this->ipv4 + this->ipv6 + this->tcp + this->udp + this->icmp) > 0) {
-        this->wired = 1;
-    }
 }

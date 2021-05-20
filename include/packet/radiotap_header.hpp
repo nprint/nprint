@@ -13,7 +13,7 @@
 #define SIZE_RADIOTAP_HEADER_BITSTRING 56
 
 struct radiotap_header {
-    uint8_t  radiotap_data[56];	/* all bytes for radiotap_data 	*/
+    uint8_t* radiotap_data;	/* all bytes for radiotap_data 	*/
 };
 
 class RadiotapHeader : public PacketHeader {

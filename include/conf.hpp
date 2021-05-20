@@ -31,11 +31,6 @@ class Config {
     uint8_t icmp;
     uint32_t payload;
 
-    /* Link-layer types */
-    uint8_t wireless;
-    uint8_t wired;
-    void set_link_layer_type();
-
     /*  Output modification */
     uint8_t stats;
     uint8_t csv;

@@ -211,7 +211,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'O':
         arguments->output_index = atoi(arg);
-        if (arguments->output_index > 4 || arguments->output_index < 0) {
+        if (arguments->output_index > 5 || arguments->output_index < 0) {
             fprintf(stderr, "invald index configuration, exiting\n");
             exit(3);
         }
@@ -235,28 +235,10 @@ int main(int argc, char **argv) {
 
     /* parse args */
     argp_parse(&argp, argc, argv, 0, 0, &config);
-    config.set_link_layer_type();
 
     /* File Writer handles writing nPrints */
     fw = new FileWriter;
     fw->set_conf(config);
-
-    /* The upper layers (Network-layer and Transport-layer) of wireless packets are encrypted.
-     * We may add decription support in a future version. */ 
-    if ((config.wireless + config.wired) > 1) {
-        fprintf(stderr, "Wireless packets can only use {-r, -w} protocol flags.\n");
-        exit(1);
-    }
-
-    /* The default index of wireless packest is tx_mac,
-     * The default index of wired packet is src_ip. */
-    // if (config.index == -1) {
-    //     if (config.wireless == 1) {
-    //         config.index = 5;
-    //     } else if (config.wired == 1) {
-    //         config.index = 0;
-    //     }
-    // } 
 
     /* No infile means processing live traffic. There is a way to delete this
      * code, but this is verbose */

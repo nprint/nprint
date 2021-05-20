@@ -21,24 +21,25 @@ void SuperPacket::print_packet(FILE *out) {
     fprintf(out, "}\n");
 }
 
-SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len, Config *c) {
+SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len, uint32_t linktype) {
     struct radiotap_header *radiotaph;
     struct wlan_header * wlanh;
 
     struct ip *ipv4h;
     struct ether_header *eth;
 
-    this->config = c;
-
     parseable = true;
 
-    if (c->wireless == 1) {
+    switch (linktype) {
+    case DLT_IEEE802_11_RADIO:
         radiotaph = (struct radiotap_header *) pkt;
         radiotap_header.set_raw(radiotaph);
 
-        wlanh = (struct wlan_header *) &radiotaph[1]; 
-        wlan_header.set_raw(wlanh);        
-    } else if (c->wired == 1) {
+        wlanh = (struct wlan_header *)((u_char *)radiotaph + radiotap_header.get_header_len()); 
+        wlan_header.set_raw(wlanh);  
+        break;
+    
+    default:
         this->max_payload_len = max_payload_len;
         eth = (struct ether_header *)pkt;
 
@@ -58,6 +59,7 @@ SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len, Config *c) {
         } else {
             parseable = false;
         }
+        break;
     }
 }
 
@@ -208,7 +210,7 @@ std::string SuperPacket::get_index(Config *c) {
         }
     }
     /* Wlan TX Mac Address */
-    else if (c->index == 5) {
+    else if (c->output_index == 5) {
         rv = get_tx_mac_address();
     }
 
