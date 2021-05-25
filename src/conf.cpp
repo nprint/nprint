@@ -7,6 +7,8 @@
 #include "conf.hpp"
 
 Config::Config() {
+    this->radiotap = 0;
+    this->wlan = 0;
     this->eth = 0;
     this->ipv4 = 0;
     this->ipv6 = 0;

@@ -36,7 +36,6 @@ class PCAPParser : public FileParser {
 
   private:
     struct timeval mrt;
-    uint32_t linktype;
     std::vector<std::string> to_fill;
     
     pcap_t *get_pcap_handle();

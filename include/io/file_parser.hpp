@@ -46,6 +46,7 @@ class FileParser {
     Stats stat;
     Config config;
     FileWriter *fw;
+    uint32_t linktype;
     void write_output(SuperPacket *sp);
     //static void signal_handler(int signum);
 

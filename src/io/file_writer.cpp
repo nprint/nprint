@@ -63,6 +63,8 @@ std::vector<std::string>
 FileWriter::build_bitstring_header(std::vector<std::string> header) {
     uint32_t i, prefix_len;
     Payload p;
+    RadiotapHeader r;
+    WlanHeader w;
     EthHeader e;
     IPv4Header v4;
     IPv6Header v6;
@@ -75,6 +77,10 @@ FileWriter::build_bitstring_header(std::vector<std::string> header) {
     /* Need to inform the payload of the max len */
     p.set_info(0, config.payload);
 
+    if (config.radiotap == 1)
+        r.get_bitstring_header(header);
+    if (config.wlan == 1)
+        w.get_bitstring_header(header);
     if (config.eth == 1)
         e.get_bitstring_header(header);
     if (config.ipv4 == 1)

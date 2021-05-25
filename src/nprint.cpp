@@ -37,9 +37,12 @@ static struct argp_option options[] = {
                                                   1: destination IP
                                                   2: source port
                                                   3: destination port
-                                                  4: flow (5-tuple))"""},
+                                                  4: flow (5-tuple)
+                                                  5: wlan tx mac)"""},
     {"stats", 'S', 0, 0, "print stats about packets processed when finished"},
     {"fill_int", 'F', "INT8_T", 0, "integer to fill missing bits with"}, 
+    {"radiotap", 'r', 0, 0, "include radiotap headers"},
+    {"wlan", 'w', 0, 0, "include wlan headers"},
     {"eth", 'e', 0, 0, "include eth headers"},
     {"ipv4", '4', 0, 0, "include ipv4 headers"},
     {"ipv6", '6', 0, 0, "include ipv6 headers"},
@@ -179,6 +182,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     case 'e':
         arguments->eth = 1;
         break;
+    case 'r':
+        arguments->radiotap = 1;
+        break;
+    case 'w':
+        arguments->wlan = 1;
+        break;
     case '4':
         arguments->ipv4 = 1;
         break;
@@ -202,7 +211,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'O':
         arguments->output_index = atoi(arg);
-        if (arguments->output_index > 4 || arguments->output_index < 0) {
+        if (arguments->output_index > 5 || arguments->output_index < 0) {
             fprintf(stderr, "invald index configuration, exiting\n");
             exit(3);
         }
