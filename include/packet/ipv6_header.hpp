@@ -13,7 +13,7 @@
 
 #include "packet_header.hpp"
 
-#define SIZE_IPV6_HEADER_BITSTRING 36
+#define SIZE_IPV6_HEADER_BITSTRING 40
 
 /*
  * Currently only supported fixed (first) IPv6 Header parsing
