@@ -1,11 +1,6 @@
-# Details
-Overview / Original nPrint paper can be found [here](https://nprint.github.io/nprint/).
+# Overview
 
-Detailed usage can be found in the [nPrint wiki](https://github.com/nprint/nprint/wiki).
-
-For a fully automated traffic analysis pipeline, see [nPrintML](https://github.com/nprint/nprintML), which combines nPrint and AutoML.
-
-There will be bugs! Please report any you see.
+https://nprint.github.io/nprint.html
 
 # Installation
 
@@ -38,11 +33,19 @@ There will be bugs! Please report any you see.
 ## Citing nPrint
 
 ```
-@inproceedings{holland2021nprint,
-  title={New directions in automated traffic analysis},
-  author={Holland, Jordan and Schmitt, Paul and Feamster, Nick and Mittal, Prateek},
-  booktitle={Proceedings of the 2021 ACM SIGSAC Conference on Computer and Communications Security},
-  pages={3366--3383},
-  year={2021}
+@inproceedings{10.1145/3460120.3484758,
+author = {Holland, Jordan and Schmitt, Paul and Feamster, Nick and Mittal, Prateek},
+title = {New Directions in Automated Traffic Analysis},
+year = {2021},
+isbn = {9781450384544},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3460120.3484758},
+doi = {10.1145/3460120.3484758},
+pages = {3366–3383},
+numpages = {18},
+keywords = {machine learning on network traffic, automated traffic analysis, network traffic analysis},
+location = {Virtual Event, Republic of Korea},
+series = {CCS '21}
 }
 ```
