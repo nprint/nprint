@@ -1,0 +1,25 @@
+name: ⚡ Feature Request
+description: Suggest a feature
+title: "[Feature]: …"
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: intent
+    attributes:
+      label: What would you like the software to do?
+      description: Please describe your proposed feature and why it matters to you.
+      placeholder: When I execute the command it fails to butter my toast. However, toast-buttering is integral to my use-case, as I will explain. In _Discourse on the Method_ (1637), René Descartes first elaborated…
+    validations:
+      required: true
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Existing workarounds
+      description: How is the above achieved now in the absence of your proposed feature? (And how is this an impediment?)
+      placeholder: A standard "butter knife" is employed to spread the butter upon the toast; over time, however, this is exhausting – and unnecessary.
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation notes
+      description: To the extent that you're able, share notes on how your feature might best be implemented by the software.
+      placeholder: USB-powered butter knives are abundant and present in 49.2% of all households. Inclusion of the necessary driver is planned for Linux kernel v5.25…

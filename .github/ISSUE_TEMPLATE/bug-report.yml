@@ -1,0 +1,59 @@
+name: 🐞 Bug Report
+description: Report a bug
+title: "[Bug]: …"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thanks for taking the time to fill out this bug report!**
+
+        Please explain your situation in detail so that we can best understand what went wrong.
+  - type: textarea
+    id: intent
+    attributes:
+      label: What did you do?
+      description: What did you do and what did you expect to happen?
+      placeholder: I was trying to ensure that my parents met and fell in love; so, I accelerated my DeLorean to 88 mph.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What happened instead of what you expected to happen?
+      placeholder: The Flux Capacitor emitted some light but then it went "kapoot."
+    validations:
+      required: true
+  - type: textarea
+    id: system
+    attributes:
+      label: Operating system
+      description: "Tell us about your computer: operating system and version"
+      placeholder: "For example: lsb_release -a"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of the software were you running?
+      placeholder: "Run: nprintml --version"
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact information
+      description: "Optional: How can we get in touch with you if we need more info?"
+      placeholder: email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output
+      description: You may copy and paste any relevant log output here. (This will be automatically formatted into code, so no need for backticks.)
+      render: shell
+    validations:
+      required: false
