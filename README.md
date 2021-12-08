@@ -1,6 +1,6 @@
 # Overview
 
-For a project overview, installation information, and detailed usage information please visit [nPrint project's homepage](https://nprint.github.io/nprint.html)
+For a project overview, installation information, and detailed usage information please visit [nPrint's project homepage](https://nprint.github.io/nprint.html)
 
 # Installation
 
