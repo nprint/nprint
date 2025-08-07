@@ -71,6 +71,8 @@ FileWriter::build_bitstring_header(std::vector<std::string> header) {
     TCPHeader tcp;
     UDPHeader udp;
     ICMPHeader icmp;
+    DNSHeader dns;
+    DHCPHeader dhcp;
     std::vector<std::string> compressed_header;
 
     prefix_len = header.size();
@@ -91,6 +93,10 @@ FileWriter::build_bitstring_header(std::vector<std::string> header) {
         tcp.get_bitstring_header(header);
     if (config.udp == 1)
         udp.get_bitstring_header(header);
+    if (config.dns == 1)
+        dns.get_bitstring_header(header);
+    if (config.dhcp == 1)
+        dhcp.get_bitstring_header(header);
     if (config.icmp == 1)
         icmp.get_bitstring_header(header);
     if (config.payload != 0)

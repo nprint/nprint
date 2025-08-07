@@ -22,7 +22,7 @@ static char doc[] =
     "Full information can be found at https://nprint.github.io/nprint/";
 static char args_doc[] = "";
 static struct argp_option options[] = {
-    {"device", 'd', "STRING", 0, "device to capture from if live capture"},
+    {"device", 'D', "STRING", 0, "device to capture from if live capture"},
     {"filter", 'f', "STRING", 0, "filter for libpcap"},
     {"count", 'c', "INTEGER", 0, "number of packets to parse (if not all)"},
     {"pcap_file", 'P', "FILE", 0, "pcap infile"},
@@ -49,6 +49,8 @@ static struct argp_option options[] = {
     {"tcp", 't', 0, 0, "include tcp headers"},
     {"udp", 'u', 0, 0, "include udp headers"},
     {"icmp", 'i', 0, 0, "include icmp headers"},
+    {"dns", 'd', 0, 0, "include dns headers"},
+    {"dhcp", 'k', 0, 0, "include dhcp headers"},
     {"payload", 'p', "PAYLOAD_SIZE", 0, "include n bytes of payload"},
     {"absolute_timestamps", 'A', 0, 0, "include absolute timestmap field"},
     {"relative_timestamps", 'R', 0, 0, "include relative timestamp field"},
@@ -125,6 +127,32 @@ icmp icmp_code     8
 icmp icmp_cksum    16
 icmp icmp_roh      32
 
+
+# DNS
+dns dns_id        16
+dns dns_flags     16
+dns dns_qdcount   16
+dns dns_ancount   16
+dns dns_nscount   16
+dns dns_arcount   16
+
+# DHCP
+dhcp dhcp_op         8
+dhcp dhcp_htype      8
+dhcp dhcp_hlen       8
+dhcp dhcp_hops       8
+dhcp dhcp_xid        32
+dhcp dhcp_secs       16
+dhcp dhcp_flags      16
+dhcp dhcp_ciaddr     32
+dhcp dhcp_yiaddr     32
+dhcp dhcp_siaddr     32
+dhcp dhcp_giaddr     32
+dhcp dhcp_chaddr    128
+dhcp dhcp_sname     512    
+dhcp dhcp_file     1024     
+
+
 # Payload
 payload payload_bit n
 
@@ -146,7 +174,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     case 'V':
         arguments->verbose = 1;
         break;
-    case 'd':
+    case 'D':
         arguments->device = arg;
         break;
     case 'f':
@@ -174,8 +202,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         arguments->outfile = arg;
         break;
     case 'F':
-        arguments->fill_with = atoi(arg);
+        if (arg) {
+            arguments->fill_with = atoi(arg);
+        } else {
+            fprintf(stderr, "[ERROR] -F missing value\n");
+            exit(1);
+        }
         break;
+
     case 'S':
         arguments->stats = 1;
         break;
@@ -202,6 +236,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         break;
     case 'i':
         arguments->icmp = 1;
+        break;
+    case 'd':
+        arguments->dns = 1;
+        break;
+    case 'k':
+        arguments->dhcp = 1;
         break;
     case 'p':
         arguments->payload = atoi(arg);

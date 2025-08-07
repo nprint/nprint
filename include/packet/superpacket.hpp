@@ -25,6 +25,8 @@
 #include "payload.hpp"
 #include "tcp_header.hpp"
 #include "udp_header.hpp"
+#include "dns_header.hpp"
+#include "dhcp_header.hpp"
 
 class SuperPacket {
   public:
@@ -37,6 +39,7 @@ class SuperPacket {
         return parseable;
     };
     std::tuple<uint8_t, uint8_t> get_packet_type();
+    std::pair<uint16_t, uint16_t> get_ports();
     void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
     std::string get_index(Config *c);
 
@@ -54,6 +57,8 @@ class SuperPacket {
     TCPHeader tcp_header;
     UDPHeader udp_header;
     ICMPHeader icmp_header;
+    DNSHeader dns_header;
+    DHCPHeader dhcp_header;
     Payload payload;
 };
 

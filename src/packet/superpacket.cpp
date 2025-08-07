@@ -17,6 +17,8 @@ void SuperPacket::print_packet(FILE *out) {
     tcp_header.print_header(out);
     udp_header.print_header(out);
     icmp_header.print_header(out);
+    dns_header.print_header(out);
+    dhcp_header.print_header(out);
     payload.print_header(out);
     fprintf(out, "}\n");
 }
@@ -77,28 +79,35 @@ bool SuperPacket::process_v4(void *pkt) {
     ipv4h = (struct ip *)pkt;
     ipv4_header.set_raw(ipv4h);
     if (ipv4_header.get_ip_proto() == IPPROTO_TCP) {
-        tcph =
-            (struct tcphdr *)((u_char *)ipv4h + ipv4_header.get_header_len());
+        tcph = (struct tcphdr *)((u_char *)ipv4h + ipv4_header.get_header_len());
         tcp_header.set_raw(tcph);
         pload = ((u_char *)tcph + tcp_header.get_header_len());
-        pload_len =
-            ipv4_header.get_total_len() -
-            (tcp_header.get_header_len() + ipv4_header.get_header_len());
+        pload_len = ipv4_header.get_total_len() -
+                   (tcp_header.get_header_len() + ipv4_header.get_header_len());
     } else if (ipv4_header.get_ip_proto() == IPPROTO_UDP) {
-        udph =
-            (struct udphdr *)((u_char *)ipv4h + ipv4_header.get_header_len());
+        udph = (struct udphdr *)((u_char *)ipv4h + ipv4_header.get_header_len());
         udp_header.set_raw(udph);
         pload = ((u_char *)udph + udp_header.get_header_len());
-        pload_len =
-            ipv4_header.get_total_len() -
-            (ipv4_header.get_header_len() + udp_header.get_header_len());
+        pload_len = ipv4_header.get_total_len() -
+                   (ipv4_header.get_header_len() + udp_header.get_header_len());
+
+        /* Check for DNS */
+    if ((ntohs(udph->uh_dport) == 53 || ntohs(udph->uh_sport) == 53) && pload_len >= 12) {
+        dns_header.set_raw(pload);
+    }
+
+        /* Check for DHCP */
+    if ((ntohs(udph->uh_dport) == 67 || ntohs(udph->uh_dport) == 68 ||
+            ntohs(udph->uh_sport) == 67 || ntohs(udph->uh_sport) == 68) &&
+        pload_len >= 240) {
+        dhcp_header.set_raw(pload);
+    }
     } else if (ipv4_header.get_ip_proto() == IPPROTO_ICMP) {
         icmph = (struct icmp *)((u_char *)ipv4h + ipv4_header.get_header_len());
         icmp_header.set_raw(icmph);
         pload = ((u_char *)icmph + icmp_header.get_header_len());
-        pload_len =
-            ipv4_header.get_total_len() -
-            (ipv4_header.get_header_len() + icmp_header.get_header_len());
+        pload_len = ipv4_header.get_total_len() -
+                   (ipv4_header.get_header_len() + icmp_header.get_header_len());
     } else {
         return false;
     }
@@ -123,28 +132,36 @@ bool SuperPacket::process_v6(void *pkt) {
     ipv6_header.set_raw(pkt);
 
     if (ipv6_header.get_ip_proto() == IPPROTO_TCP) {
-        tcph =
-            (struct tcphdr *)((u_char *)ipv6h + ipv6_header.get_header_len());
+        tcph = (struct tcphdr *)((u_char *)ipv6h + ipv6_header.get_header_len());
         tcp_header.set_raw(tcph);
         pload = tcph + tcp_header.get_header_len();
-        pload_len =
-            ipv6_header.get_total_len() -
-            (tcp_header.get_header_len() + ipv6_header.get_header_len());
+        pload_len = ipv6_header.get_total_len() -
+                   (tcp_header.get_header_len() + ipv6_header.get_header_len());
     } else if (ipv6_header.get_ip_proto() == IPPROTO_UDP) {
-        udph =
-            (struct udphdr *)((u_char *)ipv6h + ipv6_header.get_header_len());
+        udph = (struct udphdr *)((u_char *)ipv6h + ipv6_header.get_header_len());
         udp_header.set_raw(udph);
         pload = ((u_char *)udph + 8);
-        pload_len =
-            ipv6_header.get_total_len() -
-            (udp_header.get_header_len() + ipv6_header.get_header_len());
+        pload_len = ipv6_header.get_total_len() -
+                   (udp_header.get_header_len() + ipv6_header.get_header_len());
+
+        /* Check for DNS */
+    if ((ntohs(udph->uh_dport) == 53 || ntohs(udph->uh_sport) == 53) && pload_len >= 12) {
+        dns_header.set_raw(pload);
+    }
+
+        /* Check for DHCP */
+    if ((ntohs(udph->uh_dport) == 67 || ntohs(udph->uh_dport) == 68 ||
+            ntohs(udph->uh_sport) == 67 || ntohs(udph->uh_sport) == 68) &&
+        pload_len >= 240) {
+        dhcp_header.set_raw(pload);
+    }
+
     } else if (ipv6_header.get_ip_proto() == IPPROTO_ICMP) {
         icmph = (struct icmp *)((u_char *)ipv6h + ipv6_header.get_header_len());
         icmp_header.set_raw(icmph);
         pload = ((u_char *)icmph + 8);
-        pload_len =
-            ipv6_header.get_total_len() -
-            (ipv6_header.get_header_len() + icmp_header.get_header_len());
+        pload_len = ipv6_header.get_total_len() -
+                   (ipv6_header.get_header_len() + icmp_header.get_header_len());
     } else {
         return false;
     }
@@ -167,10 +184,15 @@ void SuperPacket::get_bitstring(Config *c, std::vector<int8_t> &to_fill) {
         ipv6_header.get_bitstring(to_fill, c->fill_with);
     if (c->tcp == 1)
         tcp_header.get_bitstring(to_fill, c->fill_with);
-    if (c->udp == 1)
-        udp_header.get_bitstring(to_fill, c->fill_with);
+    if (c->dns == 1) {
+        dns_header.get_bitstring(to_fill, c->fill_with);
+    }
     if (c->icmp == 1)
         icmp_header.get_bitstring(to_fill, c->fill_with);
+    if (c->dns == 1)
+        dns_header.get_bitstring(to_fill, c->fill_with);
+    if (c->dhcp == 1)
+        dhcp_header.get_bitstring(to_fill, c->fill_with);
     if (c->payload != 0)
         payload.get_bitstring(to_fill, c->fill_with);
 }
@@ -270,4 +292,13 @@ std::tuple<uint8_t, uint8_t> SuperPacket::get_packet_type() {
     }
 
     return std::tuple<uint8_t, uint8_t>(network_layer, transport_layer);
+}
+
+std::pair<uint16_t, uint16_t> SuperPacket::get_ports() {
+    if (udp_header.get_raw() != NULL) {
+        return {udp_header.get_sport(), udp_header.get_dport()};
+    } else if (tcp_header.get_raw() != NULL) {
+        return {tcp_header.get_sport(), tcp_header.get_dport()};
+    }
+    return {0, 0};
 }

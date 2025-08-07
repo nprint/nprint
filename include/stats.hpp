@@ -16,8 +16,8 @@
 class Stats {
     public:
         void print_stats();
-        void update(bool parsed, uint8_t network_layer=0, 
-                    uint8_t transport_layer=0);
+        void update(bool parsed, uint8_t network_layer, uint8_t transport_layer, uint16_t sport, uint16_t dport);
+
         uint64_t get_packets_processed();
     private:
         uint64_t packets_processed = 0;
@@ -28,6 +28,8 @@ class Stats {
         uint64_t tcp = 0;
         uint64_t udp = 0;
         uint64_t icmp = 0;
+        uint64_t dns = 0;
+        uint64_t dhcp = 0;
 };
 
 #endif

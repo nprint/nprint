@@ -29,6 +29,8 @@ class Config {
     uint8_t tcp;
     uint8_t udp;
     uint8_t icmp;
+    uint8_t dns;
+    uint8_t dhcp;
     uint32_t payload;
 
     /*  Output modification */

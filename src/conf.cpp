@@ -15,6 +15,8 @@ Config::Config() {
     this->tcp = 0;
     this->udp = 0;
     this->icmp = 0;
+    this->dns = 0;
+    this->dhcp = 0;
     this->payload = 0;
     this->fill_with = -1;
     this->num_packets = 0;
