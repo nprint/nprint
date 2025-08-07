@@ -75,3 +75,11 @@ std::string TCPHeader::get_port(bool src) {
         return std::to_string(ntohs(raw->th_dport));
     }
 }
+
+uint16_t TCPHeader::get_sport() {
+    return (raw != NULL) ? ntohs(raw->th_sport) : 0;
+}
+
+uint16_t TCPHeader::get_dport() {
+    return (raw != NULL) ? ntohs(raw->th_dport) : 0;
+}

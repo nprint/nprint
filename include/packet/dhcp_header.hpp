@@ -1,0 +1,49 @@
+/*
+ * Copyright nPrint 2020
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#ifndef DHCP_HEADER_HPP
+#define DHCP_HEADER_HPP
+
+#include "packet_header.hpp"
+
+#define SIZE_DHCP_HEADER_BITSTRING 288  // Conservative estimate for fixed fields
+
+class DHCPHeader : public PacketHeader {
+  public:
+    /* Required Functions */
+    void *get_raw();
+    void set_raw(void *raw);
+    void print_header(FILE *out);
+    uint32_t get_header_len();
+    void get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with);
+    void get_bitstring_header(std::vector<std::string> &to_fill);
+
+    /* Header Specific */
+  private:
+    struct dhcp_header {
+        uint8_t op;
+        uint8_t htype;
+        uint8_t hlen;
+        uint8_t hops;
+        uint32_t xid;
+        uint16_t secs;
+        uint16_t flags;
+        uint32_t ciaddr;
+        uint32_t yiaddr;
+        uint32_t siaddr;
+        uint32_t giaddr;
+        uint8_t chaddr[16];
+        uint8_t sname[64];
+        uint8_t file[128];
+    } __attribute__((__packed__));
+
+    struct dhcp_header *raw;
+
+
+};
+
+#endif  

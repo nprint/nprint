@@ -22,6 +22,8 @@ class TCPHeader : public PacketHeader {
     void print_header(FILE *out);
     uint32_t get_header_len();
     std::string get_port(bool src);
+    uint16_t get_sport();
+    uint16_t get_dport();
     void get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with);
     void get_bitstring_header(std::vector<std::string> &to_fill);
 

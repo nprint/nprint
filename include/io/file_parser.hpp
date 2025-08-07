@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstdint>
 
 #include "conf.hpp"
 #include "file_writer.hpp"

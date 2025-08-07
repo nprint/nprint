@@ -63,7 +63,12 @@ SuperPacket *FileParser::process_packet(void *pkt) {
         std::tie(network_layer, transport_layer) = sp->get_packet_type();
     }
     
-    stat.update(parseable, network_layer, transport_layer);
+    uint16_t sport = 0, dport = 0;
+    if (parseable) {
+        std::tie(sport, dport) = sp->get_ports();
+    }
+    stat.update(parseable, network_layer, transport_layer, sport, dport);
+
     
     return sp;
 }

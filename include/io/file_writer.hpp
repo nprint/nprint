@@ -26,6 +26,8 @@
 #include "payload.hpp"
 #include "tcp_header.hpp"
 #include "udp_header.hpp"
+#include "dns_header.hpp"
+#include "dhcp_header.hpp"
 
 /*
  * FileWriter takes care of output for all nPrints

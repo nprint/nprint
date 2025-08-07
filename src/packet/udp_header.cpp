@@ -53,3 +53,11 @@ std::string UDPHeader::get_port(bool src) {
         return std::to_string(ntohs(raw->uh_dport));
     }
 }
+
+uint16_t UDPHeader::get_sport() {
+    return (raw != NULL) ? ntohs(raw->uh_sport) : 0;
+}
+
+uint16_t UDPHeader::get_dport() {
+    return (raw != NULL) ? ntohs(raw->uh_dport) : 0;
+}
